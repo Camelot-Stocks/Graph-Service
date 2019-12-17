@@ -2,7 +2,7 @@ import moment from 'moment';
 
 const setTimeIntervals = (data, view, prices) => {
   let start = new Date();
-  let now = moment(start).add(3, 'h').toDate();
+  const now = moment(start).add(3, 'h').toDate();
   let mostRecentPrice = prices[prices.length - 1];
   let mostRecentDate;
   switch (view) {
@@ -11,14 +11,14 @@ const setTimeIntervals = (data, view, prices) => {
       let once = false;
       for (let i = 0; i < prices.length; i++) {
         if (start > now && Date.now < start) {
-          data[i] = { date: start, price: undefined }
+          data[i] = { date: start, price: undefined };
           if (!once) {
             mostRecentPrice = prices[i - 1];
             mostRecentDate = new Date(moment(start).subtract(5, 'm'));
             once = true;
           }
         } else {
-          data[i] = { date: start, price: prices[i] }
+          data[i] = { date: start, price: prices[i] };
         }
         start = moment(start).add(5, 'm').toDate();
       }
@@ -27,7 +27,7 @@ const setTimeIntervals = (data, view, prices) => {
       start = moment(start).subtract(5, 'd').toDate();
       start.setHours(9, 30, 0, 0);
       for (let i = 0; i < prices.length; i++) {
-        data[i] = { date: start, price: prices[i] }
+        data[i] = { date: start, price: prices[i] };
         start = moment(start).add(10, 'm').toDate();
       }
       // pastTime = 16;
@@ -45,7 +45,7 @@ const setTimeIntervals = (data, view, prices) => {
       start = moment(start).subtract(1, 'm').toDate();
       start.setHours(10, 0, 0, 0);
       for (let i = 0; i < prices.length; i++) {
-        data[i] = { date: start, price: prices[i] }
+        data[i] = { date: start, price: prices[i] };
         start = moment(start).add(1, 'h').toDate();
       }
       break;
@@ -53,7 +53,7 @@ const setTimeIntervals = (data, view, prices) => {
       start = moment(start).subtract(3, 'm').toDate();
       start.setHours(10, 0, 0, 0);
       for (let i = 0; i < prices.length; i++) {
-        data[i] = { date: start, price: prices[i] }
+        data[i] = { date: start, price: prices[i] };
         start = moment(start).add(1, 'h').toDate();
       }
       break;
@@ -61,7 +61,7 @@ const setTimeIntervals = (data, view, prices) => {
       start = moment(start).subtract(1, 'y').toDate();
       start.setHours(10, 0, 0, 0);
       for (let i = 0; i < prices.length; i++) {
-        data[i] = { date: start, price: prices[i] }
+        data[i] = { date: start, price: prices[i] };
         start = moment(start).add(1, 'd').toDate();
       }
       break;
@@ -69,12 +69,12 @@ const setTimeIntervals = (data, view, prices) => {
       start = moment(start).subtract(5, 'Y').toDate();
       start.setHours(10, 0, 0, 0);
       for (let i = 0; i < prices.length; i++) {
-        data[i] = { date: start, price: prices[i] }
+        data[i] = { date: start, price: prices[i] };
         start = moment(start).add(7, 'd').toDate();
       }
       break;
   }
   return [mostRecentDate, mostRecentPrice];
-}
+};
 
 export default setTimeIntervals;

@@ -1,19 +1,28 @@
 module.exports = {
-    "extends": "airbnb-base",
-    "rules": {
-        "consistent-return": "off",
-        "no-shadow": "off",
-        "no-console": "off",
-        "array-callback-return": "off",
-        "no-unused-vars": "off",
-        "no-multiple-empty-lines": "off",
-        "no-plusplus": "off",
-        "prefer-const": "off",
-        "indent": "off",
-        "no-trailing-spaces": "off",
-        "no-tabs": "off",
-        "padded-blocks": "off",
-        "arrow-body-style": "as-needed",
+  env: {
+    browser: true,
+    es6: true,
+    node: true,
+  },
+  extends: [
+    'plugin:react/recommended',
+    'airbnb',
+    'plugin:jest/recommended',
+  ],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    "parser": "babel-eslint"
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
+  plugins: [
+    'react',
+  ],
+  rules: {
+  },
 };

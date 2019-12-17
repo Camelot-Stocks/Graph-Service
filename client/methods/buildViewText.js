@@ -14,6 +14,6 @@ const buildViewText = (view) => {
       return 'Past 5 Years';
   }
   throw new Error('View Passed in wrong');
-}
+};
 
 export default buildViewText;

@@ -1,0 +1,4 @@
+/jest.config.js
+/Public/bundle.js
+#inherited client code, not cleaning up
+/client

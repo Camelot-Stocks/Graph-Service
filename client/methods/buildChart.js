@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import moment from 'moment';
 import buildLine from './buildLine';
-import setTimeIntervals from './setTimeIntervals'
+import setTimeIntervals from './setTimeIntervals';
 import updateHover from './updateHover';
 
 const bisectDate = (data, matcher) => {
@@ -11,11 +11,12 @@ const bisectDate = (data, matcher) => {
     }
   }
   return 1;
-}
+};
 
 const updateLegend = (currentData, prices, svg, view) => {
   d3.selectAll('.lineLegend').remove();
-  let offset, xRate;
+  let offset; let
+    xRate;
   const formatDate = (date) => {
     switch (view) {
       case '1D': offset = 33; xRate = 6.315; return (`${moment(date).format('h:mm a')} ET`);
@@ -25,7 +26,7 @@ const updateLegend = (currentData, prices, svg, view) => {
       case '1Y': offset = 47; xRate = 2.71; return (`${moment(date).format('MMM D, YYYY')} ET`);
       case '5Y': offset = 47; xRate = 2.605; return (`${moment(date).format('MMM D, YYYY')} ET`);
     }
-  }
+  };
 
   const lineLegend = svg
     .selectAll('.lineLegend')
@@ -33,42 +34,40 @@ const updateLegend = (currentData, prices, svg, view) => {
     .enter()
     .append('g')
     .attr('class', 'lineLegend')
-    .attr('transform', (d, i) => {
-      return `translate(0, ${i * 20})`;
-    });
+    .attr('transform', (d, i) => `translate(0, ${i * 20})`);
   lineLegend
     .append('text')
-    .text(d => {
+    .text((d) => {
       if (d === 'date') {
         return formatDate(currentData[d]);
       }
     })
     .style('fill', '#cbcbcd')
     .attr('transform', `translate(${prices.indexOf(currentData.price) * xRate - offset},-5)`);
-}
+};
 
 const buildGreyLine = (data, view, svg, xScale, yScale) => {
   if (view === '1D') {
-    let ticks = [];
+    const ticks = [];
     for (let i = 0; i < data.length; i++) { ticks.push({ date: data[i].date, price: data[0].price }); }
     svg.selectAll('circle')
       .data(ticks)
       .enter()
       .append('circle')
       // .attr('color', ()=> {debugger})
-      .attr('cx', (d) => { return xScale(d['date']); })
-      .attr('cy', (d) => { return yScale(d['price']); })
+      .attr('cx', (d) => xScale(d.date))
+      .attr('cy', (d) => yScale(d.price))
       .attr('r', '0.7')
       .attr('fill', 'grey')
       .attr('z-index', '10');
   } else {
     d3.selectAll('circle').remove();
   }
-}
+};
 
 const hoverOutShade = (view) => {
   if (view === '1D') {
-    let afterHours = new Date()
+    const afterHours = new Date();
     afterHours.setHours(16);
     d3.select('#pre-market')
       .attr('stroke-opacity', '1');
@@ -80,20 +79,22 @@ const hoverOutShade = (view) => {
     d3.selectAll('.weekLine')
       .attr('stroke-opacity', '1');
   }
-}
+};
 
 const buildChart = (prices, view, updateTicker, lineColor, backgroundColor) => {
-  //do setup
+  // do setup
   d3.selectAll('svg').remove();
-  let data = [];
-  let [mostRecentDate, mostRecentPrice] = setTimeIntervals(data, view, prices);
-  const margin = { top: 50, right: 0, bottom: 20, left: 0 };
+  const data = [];
+  const [mostRecentDate, mostRecentPrice] = setTimeIntervals(data, view, prices);
+  const margin = {
+    top: 50, right: 0, bottom: 20, left: 0,
+  };
   const width = 676;
   const height = 196;
-  const xMin = d3.min(data, d => { return d['date']; });
-  const xMax = d3.max(data, d => { return d['date']; });
-  const yMin = d3.min(data, d => { return d['price']; });
-  const yMax = d3.max(data, d => { return d['price']; });
+  const xMin = d3.min(data, (d) => d.date);
+  const xMax = d3.max(data, (d) => d.date);
+  const yMin = d3.min(data, (d) => d.price);
+  const yMax = d3.max(data, (d) => d.price);
   const xScale = d3
     .scaleTime()
     .domain([xMin, xMax])
@@ -102,24 +103,24 @@ const buildChart = (prices, view, updateTicker, lineColor, backgroundColor) => {
     .scaleLinear()
     .domain([yMin, yMax])
     .range([height, 0]);
-  //append svg to page and set attributes
+  // append svg to page and set attributes
   const svg = d3
     .select('#stockPriceHistoryChart')
     .append('svg')
     .attr('overflow', 'visible')
-    .attr('width', width + margin['left'] + margin['right'])
-    .attr('height', height + margin['top'] + margin['bottom'])
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
     .append('g')
-    .attr('transform', `translate(${margin['left']},  ${margin['top']})`);
+    .attr('transform', `translate(${margin.left},  ${margin.top})`);
   const line = d3
     .line()
-    .x(d => { return xScale(d['date']); })
-    .y(d => { return yScale(d['price']); });
+    .x((d) => xScale(d.date))
+    .y((d) => yScale(d.price));
 
-  //Divide into sections and build line
+  // Divide into sections and build line
   buildLine(data, view, svg, line, lineColor);
 
-  //Append grey axis overlay
+  // Append grey axis overlay
   buildGreyLine(data, view, svg, xScale, yScale);
 
   function generateCrosshair() {
@@ -132,17 +133,17 @@ const buildChart = (prices, view, updateTicker, lineColor, backgroundColor) => {
     } else {
       currentPoint = { date: mostRecentDate, price: mostRecentPrice };
     }
-    focus.attr('transform', `translate(${xScale(currentPoint['date'])},${yScale(currentPoint['price'])})`);
+    focus.attr('transform', `translate(${xScale(currentPoint.date)},${yScale(currentPoint.price)})`);
 
     focus
       .select('line.y')
       .attr('x1', 0)
       .attr('x2', 0)
-      .attr('y1', height - height - yScale(currentPoint['price']))
-      .attr('y2', height - yScale(currentPoint['price']))
+      .attr('y1', height - height - yScale(currentPoint.price))
+      .attr('y2', height - yScale(currentPoint.price));
     updateLegend(currentPoint, prices, svg, view);
   }
-  console.log('here',backgroundColor);
+  console.log('here', backgroundColor);
   const focus = svg
     .append('g')
     .attr('class', 'focus')
@@ -152,7 +153,7 @@ const buildChart = (prices, view, updateTicker, lineColor, backgroundColor) => {
     .style('display', 'none');
   focus.append('line').classed('y', true);
   focus.append('circle').attr('r', 4.5);
-  //legend of date
+  // legend of date
   svg
     .append('rect')
     .attr('class', 'overlay')
@@ -163,9 +164,9 @@ const buildChart = (prices, view, updateTicker, lineColor, backgroundColor) => {
       updateTicker(mostRecentPrice);
       hoverOutShade(view);
       d3.selectAll('.lineLegend').remove();
-      focus.style('display', 'none')
+      focus.style('display', 'none');
     })
-    .on('mousemove', generateCrosshair)
+    .on('mousemove', generateCrosshair);
   d3.select('.overlay')
     .style('fill', 'none')
     .style('pointer-events', 'all');
@@ -175,6 +176,6 @@ const buildChart = (prices, view, updateTicker, lineColor, backgroundColor) => {
     .style('stroke', '#ababab')
     .style('stroke-width', '1.5px');
   return { mostRecentDate, mostRecentPrice };
-}
+};
 
 export default buildChart;

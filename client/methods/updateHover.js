@@ -1,10 +1,10 @@
 import * as d3 from 'd3';
 import moment from 'moment';
 
-const updateHover = ({date, price}, view, updateTicker, mostRecentPrice) => {
+const updateHover = ({ date, price }, view, updateTicker, mostRecentPrice) => {
   if (view === '1D') {
-    let preMarket = new Date().setHours(9, 30, 0, 0);
-    let afterMarket = new Date().setHours(16, 0, 0, 0);
+    const preMarket = new Date().setHours(9, 30, 0, 0);
+    const afterMarket = new Date().setHours(16, 0, 0, 0);
     d3.select('#pre-market')
       .attr('stroke-opacity', '.5');
     d3.select('#market')
@@ -40,7 +40,7 @@ const updateHover = ({date, price}, view, updateTicker, mostRecentPrice) => {
     // D4 = moment(D4).subtract(2, 'd').toDate().setHours(9, 30, 0, 0);
     // D5 = moment(D5).subtract(1, 'd').toDate().setHours(9, 30, 0, 0);
     d3.selectAll('.weekLine')
-      .attr('stroke-opacity', '.5')
+      .attr('stroke-opacity', '.5');
     if (date <= D2) {
       d3.select('#WD1')
         .attr('stroke-opacity', '1');
@@ -65,6 +65,6 @@ const updateHover = ({date, price}, view, updateTicker, mostRecentPrice) => {
   } else {
     updateTicker(price, '');
   }
-}
+};
 
 export default updateHover;

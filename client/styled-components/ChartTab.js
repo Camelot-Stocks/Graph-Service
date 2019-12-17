@@ -13,7 +13,7 @@ const Tab = styled.button`
   margin-right: 18px;
   margin-bottom: -1.5px;
   :hover {
-    color: ${props => props.lineColor};
+    color: ${(props) => props.lineColor};
   }
 `;
 const ChartTab = styled.span`
@@ -24,58 +24,48 @@ const ChartTab = styled.span`
 `;
 
 const Tab1D = styled(Tab)`
-  color: ${props => {
-    let offColor = props.backgroundColor === 'white' ? 'black' : 'white';
+  color: ${(props) => {
+    const offColor = props.backgroundColor === 'white' ? 'black' : 'white';
     return props.view === '1D' ? props.lineColor : offColor;
   }}
-  border-bottom: ${props => {
-    return props.view === '1D' ? `1.5px solid ${props.lineColor};` : 'none;'
-  }}
+  border-bottom: ${(props) => (props.view === '1D' ? `1.5px solid ${props.lineColor};` : 'none;')}
 `;
 const Tab1W = styled(Tab)`
-  color: ${props => {
-    let offColor = props.backgroundColor === 'white' ? 'black' : 'white';
+  color: ${(props) => {
+    const offColor = props.backgroundColor === 'white' ? 'black' : 'white';
     return props.view === '1W' ? props.lineColor : offColor;
   }}
-  border-bottom: ${props => {
-    return props.view === '1W' ? `1.5px solid ${props.lineColor};` : 'none;'
-  }}
+  border-bottom: ${(props) => (props.view === '1W' ? `1.5px solid ${props.lineColor};` : 'none;')}
   `;
 const Tab1M = styled(Tab)`
-  color: ${props => {
-    let offColor = props.backgroundColor === 'white' ? 'black' : 'white';
+  color: ${(props) => {
+    const offColor = props.backgroundColor === 'white' ? 'black' : 'white';
     return props.view === '1M' ? props.lineColor : offColor;
   }}
-  border-bottom: ${props => {
-    return props.view === '1M' ? `1.5px solid ${props.lineColor};` : 'none;'
-  }}  
+  border-bottom: ${(props) => (props.view === '1M' ? `1.5px solid ${props.lineColor};` : 'none;')}  
 `;
 const Tab3M = styled(Tab)`
-  color: ${props => {
-    let offColor = props.backgroundColor === 'white' ? 'black' : 'white';
+  color: ${(props) => {
+    const offColor = props.backgroundColor === 'white' ? 'black' : 'white';
     return props.view === '3M' ? props.lineColor : offColor;
   }}
-  border-bottom: ${props => {
-    return props.view === '3M' ? `1.5px solid ${props.lineColor};` : 'none;'
-  }}  
+  border-bottom: ${(props) => (props.view === '3M' ? `1.5px solid ${props.lineColor};` : 'none;')}  
 `;
 const Tab1Y = styled(Tab)`
-  color: ${props => {
-    let offColor = props.backgroundColor === 'white' ? 'black' : 'white';
+  color: ${(props) => {
+    const offColor = props.backgroundColor === 'white' ? 'black' : 'white';
     return props.view === '1Y' ? props.lineColor : offColor;
   }}
-  border-bottom: ${props => {
-    return props.view === '1Y' ? `1.5px solid ${props.lineColor};` : 'none;'
-  }}  
+  border-bottom: ${(props) => (props.view === '1Y' ? `1.5px solid ${props.lineColor};` : 'none;')}  
 `;
 const Tab5Y = styled(Tab)`
-  color: ${props => {
-    let offColor = props.backgroundColor === 'white' ? 'black' : 'white';
+  color: ${(props) => {
+    const offColor = props.backgroundColor === 'white' ? 'black' : 'white';
     return props.view === '5Y' ? props.lineColor : offColor;
   }}
-  border-bottom: ${props => {
-    return props.view === '5Y' ? `1.5px solid ${props.lineColor};` : 'none;'
-  }}
+  border-bottom: ${(props) => (props.view === '5Y' ? `1.5px solid ${props.lineColor};` : 'none;')}
 `;
 
-export { ChartTab, Tab1D, Tab1W, Tab1M, Tab3M, Tab1Y, Tab5Y };
+export {
+  ChartTab, Tab1D, Tab1W, Tab1M, Tab3M, Tab1Y, Tab5Y,
+};

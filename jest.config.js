@@ -4,7 +4,7 @@ module.exports = {
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
   },
-  moduleFileExtensions: ["js", "jsx"],
-  moduleDirectories: ["node_modules"],
-  setupFilesAfterEnv: ["<rootDir>/enzyme.config.js"]
-}
+  moduleFileExtensions: ['js', 'jsx'],
+  moduleDirectories: ['node_modules'],
+  setupFilesAfterEnv: ['<rootDir>/enzyme.config.js'],
+};

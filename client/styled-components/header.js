@@ -1,13 +1,9 @@
 import styled from 'styled-components';
 
 const HeaderButton = styled.button`
-  background: ${props => {
-    return props.backgroundColor === 'white' ? '#f4f4f5' : '#0e0d0d';
-  }};
+  background: ${(props) => (props.backgroundColor === 'white' ? '#f4f4f5' : '#0e0d0d')};
   font-size: 13px;
-  color: ${props => {
-    return props.backgroundColor === 'white' ? '#171718' : 'white';
-  }};
+  color: ${(props) => (props.backgroundColor === 'white' ? '#171718' : 'white')};
   border-radius: 15px
   border: none;
   padding: 0;
@@ -16,9 +12,7 @@ const HeaderButton = styled.button`
 `;
 const Header = styled.div`
   font-size: 36px;
-  color: ${props => {
-    return props.backgroundColor === 'white' ? 'black' : 'white';
-  }};
+  color: ${(props) => (props.backgroundColor === 'white' ? 'black' : 'white')};
 `;
 const Company = styled.span`
 `;
@@ -30,13 +24,11 @@ const TagsContainer = styled.div`
 const Tags = styled.button`
   font-size: 13px;
   font-family: "DINPro-regular";
-  background: ${props => {
-    console.log(props.backgroundColor)
+  background: ${(props) => {
+    console.log(props.backgroundColor);
     return props.backgroundColor === 'white' ? '#e6f9f3' : '#182b27';
   }};
-  color: ${props => {
-    return props.lineColor === '#21ce99' ? '#21ce99' : '#f45531';
-  }};
+  color: ${(props) => (props.lineColor === '#21ce99' ? '#21ce99' : '#f45531')};
   border-radius: 13px;
   border: none;
   height: 28px;
@@ -44,9 +36,7 @@ const Tags = styled.button`
   margin-right: 20px;
   :hover {
     color: #1b1b1d;
-    background: ${props => {
-      return props.lineColor === '#21ce99' ? '#21ce99' : '#f45531';
-    }};
+    background: ${(props) => (props.lineColor === '#21ce99' ? '#21ce99' : '#f45531')};
   }    
 `;
 const AnalystHoldTooltip = styled.span`
@@ -66,29 +56,17 @@ const AnalystHoldTooltip = styled.span`
   z-index: 1;
 `;
 const AnalystHold = styled(HeaderButton)`
-  background: ${props => {
-    return props.backgroundColor === 'white' ? '#f4f4f5' : '#0e0d0d';
-  }};
+  background: ${(props) => (props.backgroundColor === 'white' ? '#f4f4f5' : '#0e0d0d')};
   font-size: 13px;
-  color: ${props => {
-    return props.backgroundColor === 'white' ? '#171718' : 'white';
-  }};
-  background-image: ${props => {
-    return props.backgroundColor === 'white' ? `url('/graph/img/analyst-on.png')` : `url('/graph/img/analyst-off.png')`;
-  }};
+  color: ${(props) => (props.backgroundColor === 'white' ? '#171718' : 'white')};
+  background-image: ${(props) => (props.backgroundColor === 'white' ? 'url(\'/graph/img/analyst-on.png\')' : 'url(\'/graph/img/analyst-off.png\')')};
   background-size: 13px 13px;
   background-repeat: no-repeat;
   background-position: 15% center;
   :hover {
-    background: ${props => {
-      return props.backgroundColor === 'white' ? '#171718' : 'white';
-    }};
-    color: ${props => {
-      return props.backgroundColor === 'white' ? 'white' : 'black';
-    }};
-    background-image: ${props => {
-      return props.backgroundColor === 'white' ? `url('/graph/img/analyst-off.png')` : `url('/graph/img/analyst-on.png')`;
-    }};
+    background: ${(props) => (props.backgroundColor === 'white' ? '#171718' : 'white')};
+    color: ${(props) => (props.backgroundColor === 'white' ? 'white' : 'black')};
+    background-image: ${(props) => (props.backgroundColor === 'white' ? 'url(\'/graph/img/analyst-off.png\')' : 'url(\'/graph/img/analyst-on.png\')')};
     background-size: 13px 13px;
     background-repeat: no-repeat;
     background-position: 15% center;
@@ -114,29 +92,17 @@ const RobinhoodOwnersTooltip = styled.span`
   z-index: 1;
 `;
 const RobinhoodOwners = styled(HeaderButton)`
-  background: ${props => {
-    return props.backgroundColor === 'white' ? '#f4f4f5' : '#0e0d0d';
-  }};
+  background: ${(props) => (props.backgroundColor === 'white' ? '#f4f4f5' : '#0e0d0d')};
   font-size: 13px;
-  color: ${props => {
-    return props.backgroundColor === 'white' ? '#171718' : 'white';
-  }};
-  background-image: ${props => {
-    return props.backgroundColor === 'white' ? `url('/graph/img/owners-on.png')` : `url('/graph/img/owners-off.png')`;
-  }};
+  color: ${(props) => (props.backgroundColor === 'white' ? '#171718' : 'white')};
+  background-image: ${(props) => (props.backgroundColor === 'white' ? 'url(\'/graph/img/owners-on.png\')' : 'url(\'/graph/img/owners-off.png\')')};
   background-size: 13px 13px;
   background-repeat: no-repeat;
   background-position: 17% center;
   :hover {
-    background: ${props => {
-      return props.backgroundColor === 'white' ? '#171718' : 'white';
-    }};
-    color: ${props => {
-      return props.backgroundColor === 'white' ? 'white' : 'black';
-    }};
-    background-image: ${props => {
-      return props.backgroundColor === 'white' ? `url('/graph/img/owners-off.png')` : `url('/graph/img/owners-on.png')`;
-    }};
+    background: ${(props) => (props.backgroundColor === 'white' ? '#171718' : 'white')};
+    color: ${(props) => (props.backgroundColor === 'white' ? 'white' : 'black')};
+    background-image: ${(props) => (props.backgroundColor === 'white' ? 'url(\'/graph/img/owners-off.png\')' : 'url(\'/graph/img/owners-on.png\')')};
     background-size: 13px 13px;
     background-repeat: no-repeat;
     background-position: 17% center;
@@ -163,7 +129,7 @@ const FullTicker = styled.div`
   font-size: 30px;
   z-index: 45;
 `;
-const Ticker = styled.div.attrs((/* props */) => ({ id: "odometer" }))`
+const Ticker = styled.div.attrs((/* props */) => ({ id: 'odometer' }))`
   font-family: "DINPro-Light";
   line-height: 26px;
   margin-top: -10px;
@@ -183,4 +149,6 @@ const ViewText = styled.span`
   height: 15px;
 `;
 
-export { Header, Company, Tags, TagsContainer, AnalystHold, AnalystHoldTooltip, RobinhoodOwners, RobinhoodOwnersTooltip, HeaderTopContainer, HeaderTopButtons, Ticker, FullTicker, GainLoss, ViewText };
+export {
+  Header, Company, Tags, TagsContainer, AnalystHold, AnalystHoldTooltip, RobinhoodOwners, RobinhoodOwnersTooltip, HeaderTopContainer, HeaderTopButtons, Ticker, FullTicker, GainLoss, ViewText,
+};
