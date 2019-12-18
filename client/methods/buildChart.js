@@ -143,7 +143,7 @@ const buildChart = (prices, view, updateTicker, lineColor, backgroundColor) => {
       .attr('y2', height - yScale(currentPoint.price));
     updateLegend(currentPoint, prices, svg, view);
   }
-  console.log('here', backgroundColor);
+  // console.log('here', backgroundColor);
   const focus = svg
     .append('g')
     .attr('class', 'focus')
