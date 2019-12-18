@@ -20,4 +20,20 @@ app.get('/api/graph/stockHistory', async (req, res) => {
   }
 });
 
+// eslint-disable-next-line no-unused-vars
+app.post('/api/graph/stockHistory', async (req, res) => {
+  // TODO
+});
+
+// eslint-disable-next-line no-unused-vars
+app.put('/api/graph/stockHistory', async (req, res) => {
+  // TODO
+});
+
+// eslint-disable-next-line no-unused-vars
+app.delete('/api/graph/stockHistory', async (req, res) => {
+  // TODO
+});
+
+// eslint-disable-next-line no-console
 app.listen(port, () => { console.log(`server now running on ${port}`); });
