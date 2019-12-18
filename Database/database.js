@@ -4,9 +4,7 @@ mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useU
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  // we're connected!
-});
+db.once('open', () => console.log('db connected'));
 
 const stockSchema = new mongoose.Schema({
   id: Number,
@@ -26,7 +24,7 @@ const stockSchema = new mongoose.Schema({
 
 const Stock = mongoose.model('Stock', stockSchema);
 
-module.exports.save = (stocksArray) => {
+const save = (stocksArray) => {
   // Stock.deleteMany({}, (err) => {
   //   if (err) { throw err; }
   //   console.log('deleted step 2')
@@ -45,9 +43,14 @@ module.exports.save = (stocksArray) => {
   // })
 };
 
-module.exports.find = (id, endCallback) => {
+const find = (id, endCallback) => {
   Stock.find({ id }, (err, stock) => {
     if (err) { throw err; }
     endCallback(stock);
   });
+};
+
+module.exports = {
+  save,
+  find,
 };
