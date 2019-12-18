@@ -36,15 +36,15 @@ Open browser to localhost:3001
 
 ## API
 
-# GET
+### GET
 /api/graph/stockHistory[?id=<id>]
 
-# POST
+### POST
 /api/graph/stockHistory
 
-# PUT
+### PUT
 /api/graph/stockHistory
 
-# DELETE
+### DELETE
 /api/graph/stockHistory
 
