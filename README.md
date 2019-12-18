@@ -41,14 +41,14 @@ Open browser to localhost:3001
 /api/graph/stockHistory
 
 ### GET
-/api/graph/stockHistory[?id=<id>]
+/api/graph/stockHistory[?id=[ID]]
 
 ### POST
-/api/graph/stockHistory[?id=<id>]
+/api/graph/stockHistory[?id=[ID]]
 
 ### PUT
-/api/graph/stockHistory[?id=<id>]
+/api/graph/stockHistory[?id=[ID]]
 
 ### DELETE
-/api/graph/stockHistory[?id=<id>]
+/api/graph/stockHistory[?id=[ID]]
 
