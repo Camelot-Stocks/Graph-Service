@@ -1,4 +1,4 @@
-import { isMainThread } from 'worker_threads';
+// import { isMainThread } from 'worker_threads';
 
 /* eslint-disable jest/no-commented-out-tests */
 // import React from 'react';

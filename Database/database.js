@@ -30,6 +30,8 @@ module.exports.save = (stocksArray) => {
   // Stock.deleteMany({}, (err) => {
   //   if (err) { throw err; }
   //   console.log('deleted step 2')
+
+  // eslint-disable-next-line array-callback-return
   stocksArray.map((singleStock) => {
     const newStock = new Stock(singleStock);
     newStock.save((err, stock) => {
