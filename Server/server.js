@@ -12,8 +12,9 @@ app.get('/graph/stocks', (req, res) => {
   const callback = (data) => {
     res.end(JSON.stringify(data));
   };
-  const stockId = req.query.id ? req.query.id : '4';
-  db.find(stockId, callback);
+  // const stockId = req.query.id ? req.query.id : '4';
+  const { id } = req.query;
+  db.find(id, callback);
 });
 
 app.listen(port, () => { console.log(`server now running on ${port}`); });
