@@ -44,7 +44,13 @@ const save = (stocksArray) => {
 
 const find = (id) => Stock.find({ id }).exec();
 
+const post = (stockHistory) => {
+  const doc = new Stock(stockHistory);
+  return doc.save().exec();
+};
+
 module.exports = {
   save,
   find,
+  post,
 };
