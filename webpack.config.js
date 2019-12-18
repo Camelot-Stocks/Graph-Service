@@ -23,19 +23,14 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader'
-        ]
+          'css-loader',
+        ],
       },
     ],
   },
   plugins: [
-		new BrotliPlugin({
-			asset: '[path].br[query]',
-			test: /\.(js|css|html|svg)$/,
-			threshold: 10240,
-			minRatio: 0.8
-		})
-	],
+
+  ],
   resolve: {
     extensions: ['.jsx', '.js'],
   },

@@ -30,16 +30,18 @@ module.exports.save = (stocksArray) => {
   // Stock.deleteMany({}, (err) => {
   //   if (err) { throw err; }
   //   console.log('deleted step 2')
-    stocksArray.map((singleStock) => {
-      const newStock = new Stock(singleStock);
-      newStock.save((err, stock) => {
-        console.log(`Creating Data Entry Company ${stock.id}/100`);
-        if (err) throw err;
-        if (stock.id === 100) {
-          mongoose.disconnect();
-        }
-      });
+
+  // eslint-disable-next-line array-callback-return
+  stocksArray.map((singleStock) => {
+    const newStock = new Stock(singleStock);
+    newStock.save((err, stock) => {
+      console.log(`Creating Data Entry Company ${stock.id}/100`);
+      if (err) throw err;
+      if (stock.id === 100) {
+        mongoose.disconnect();
+      }
     });
+  });
   // })
 };
 
