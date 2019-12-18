@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+// eslint-disable-next-line no-console
+db.on('error', console.log);
+// eslint-disable-next-line no-console
 db.once('open', () => console.log('db connected'));
 
 const stockSchema = new mongoose.Schema({
@@ -28,6 +30,7 @@ const save = (stocksArray) => {
   stocksArray.forEach((singleStock) => {
     const newStock = new Stock(singleStock);
     newStock.save((err, stock) => {
+      // eslint-disable-next-line no-console
       console.log(`Creating Data Entry Company ${stock.id}/100`);
 
       if (err) throw err;
