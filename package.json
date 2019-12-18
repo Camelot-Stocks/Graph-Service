@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server/server.js",
     "start:docker": "node server/server.js",
-    "build": "webpack -w -d --mode=production",
+    "build": "webpack --mode=production",
+    "build:dev": "webpack -w -d",
     "seed": "node seeding/seed.js",
     "test": "jest --coverage --colors",
     "test:watch": "jest --watch --coverage",
