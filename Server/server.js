@@ -8,13 +8,16 @@ const app = express();
 
 app.use(cors());
 app.use('/', express.static(path.resolve(__dirname, '../public')));
-app.get('/graph/stocks', (req, res) => {
-  const callback = (data) => {
-    res.end(JSON.stringify(data));
-  };
-  // const stockId = req.query.id ? req.query.id : '4';
+
+app.get('/graph/stocks', async (req, res) => {
   const { id } = req.query;
-  db.find(id, callback);
+
+  try {
+    const stocks = await db.find(id);
+    res.end(JSON.stringify(stocks));
+  } catch (error) {
+    res.status(500).end('server cannot retrieve stocks');
+  }
 });
 
 app.listen(port, () => { console.log(`server now running on ${port}`); });
