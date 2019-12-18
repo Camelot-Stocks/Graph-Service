@@ -1,3 +1,4 @@
+# Setup
 How to start application:
 
 ## Step 1
@@ -34,7 +35,10 @@ to compile with webpack and babel
 
 Open browser to localhost:3001
 
-## API
+# API
+
+# Route
+/api/graph/stockHistory
 
 ### GET
 /api/graph/stockHistory[?id=<id>]
