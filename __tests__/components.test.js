@@ -1,3 +1,5 @@
+import { isMainThread } from 'worker_threads';
+
 /* eslint-disable jest/no-commented-out-tests */
 // import React from 'react';
 // import { shallow, mount } from 'enzyme';
@@ -13,6 +15,12 @@
 // import ChartTab from '../client/components/ChartTab';
 // import Expand from '../client/components/Expand';
 // import Wrapper from '../client/styled-components/Wrapper';
+
+describe('server', () => {
+  it('Should write actual tests', () => {
+    expect(true).toBe(true);
+  });
+});
 
 describe.skip('Components', () => {
   // describe('<App /> Component', () => {
