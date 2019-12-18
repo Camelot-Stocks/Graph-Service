@@ -16,7 +16,7 @@
 // import Expand from '../client/components/Expand';
 // import Wrapper from '../client/styled-components/Wrapper';
 
-describe('server', () => {
+describe('placeholder', () => {
   it('Should write actual tests', () => {
     expect(true).toBe(true);
   });

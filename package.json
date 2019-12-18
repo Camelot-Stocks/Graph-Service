@@ -9,7 +9,8 @@
     "build": "webpack -w -d --mode=production",
     "seed": "node seeding/seed.js",
     "test": "jest --coverage --colors",
-    "test:watch": "jest --watch --coverage"
+    "test:watch": "jest --watch --coverage",
+    "lint": "eslint --ext .js,.jsx ."
   },
   "keywords": [],
   "author": "Aston Khor <khoraston@gmail.com> (NA)",
