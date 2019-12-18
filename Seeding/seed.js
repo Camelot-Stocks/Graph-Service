@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const db = require('../database/database.js');
+const db = require('../Database/database.js');
 
 const allStocks = [];
 const names = [];
