@@ -63,7 +63,7 @@ class App extends React.Component {
 	}
 
 	populateStocks(callback) {
-		fetch(`/graph/stocks${window.location.search || '?id=4'}`, { method: 'GET' })
+		fetch(`/api/graph/stockHistory${window.location.search || '?id=4'}`, { method: 'GET' })
 			.then((response) => response.json())
 			.then((data) => { this.setState(data[0], callback); });
 	}
