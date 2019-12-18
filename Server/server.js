@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use('/', express.static(path.resolve(__dirname, '../public')));
 
-app.get('/graph/stocks', async (req, res) => {
+app.get('/api/graph/stockHistory', async (req, res) => {
   const { id } = req.query;
 
   try {
