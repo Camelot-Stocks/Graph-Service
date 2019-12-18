@@ -8,11 +8,11 @@ const symbols = [];
 const tags = [];
 
 
-const loadNames = new Promise((resolve, reject) => {
+const loadNames = new Promise((resolve) => {
   fs.readFile(path.resolve(__dirname, 'Companies.csv'), 'utf8', (err, data) => {
     if (err) throw err;
     const dataArray = data.split(/\r?\n/);
-    for (let i = 1; i < dataArray.length; i++) {
+    for (let i = 1; i < dataArray.length; i += 1) {
       dataArray[i] = dataArray[i].split(',');
       symbols.push(dataArray[i][0]);
       names.push(dataArray[i][1]);
@@ -25,11 +25,11 @@ const loadNames = new Promise((resolve, reject) => {
 const buildHistoricPrice = (count, deltaVariation, price) => {
   let newPrice = price;
   const priceArray = [];
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i += 1) {
     priceArray.push(newPrice);
     newPrice += ((Math.random() - 0.5) * deltaVariation * 2);
     if (newPrice <= 0) {
-      newPrice = -1 * newPrice;
+      newPrice *= -1;
     }
   }
   return priceArray;
@@ -37,7 +37,7 @@ const buildHistoricPrice = (count, deltaVariation, price) => {
 
 const buildStocks = (callback) => {
   loadNames.then(() => {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i += 1) {
       const stock = {};
       const startPrice = Math.random() * 200;
       stock.id = i + 1;
