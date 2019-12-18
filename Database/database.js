@@ -39,12 +39,7 @@ const save = (stocksArray) => {
   });
 };
 
-const find = (id, endCallback) => {
-  Stock.find({ id }, (err, stock) => {
-    if (err) { throw err; }
-    endCallback(stock);
-  });
-};
+const find = async (id) => Stock.find({ id }).exec();
 
 module.exports = {
   save,
