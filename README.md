@@ -44,11 +44,11 @@ Open browser to localhost:3001
 /api/graph/stockHistory[?id=<id>]
 
 ### POST
-/api/graph/stockHistory
+/api/graph/stockHistory[?id=<id>]
 
 ### PUT
-/api/graph/stockHistory
+/api/graph/stockHistory[?id=<id>]
 
 ### DELETE
-/api/graph/stockHistory
+/api/graph/stockHistory[?id=<id>]
 
