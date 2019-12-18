@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use('/', express.static(path.resolve(__dirname, '../public')));
-app.get('/graph/getStocks', (req, res) => {
+app.get('/graph/stocks', (req, res) => {
   const callback = (data) => {
     res.end(JSON.stringify(data));
   };
