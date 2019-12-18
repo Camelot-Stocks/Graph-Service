@@ -14,7 +14,7 @@ app.get('/api/graph/stockHistory', async (req, res) => {
 
   try {
     const stocks = await db.find(id);
-    res.end(JSON.stringify(stocks));
+    res.json(stocks);
   } catch (error) {
     res.status(500).end('server cannot retrieve stocks');
   }

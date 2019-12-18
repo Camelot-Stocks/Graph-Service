@@ -39,7 +39,7 @@ const save = (stocksArray) => {
   });
 };
 
-const find = async (id) => Stock.find({ id }).exec();
+const find = (id) => Stock.find({ id }).exec();
 
 module.exports = {
   save,
