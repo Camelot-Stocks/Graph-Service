@@ -25,22 +25,18 @@ const stockSchema = new mongoose.Schema({
 const Stock = mongoose.model('Stock', stockSchema);
 
 const save = (stocksArray) => {
-  // Stock.deleteMany({}, (err) => {
-  //   if (err) { throw err; }
-  //   console.log('deleted step 2')
-
-  // eslint-disable-next-line array-callback-return
-  stocksArray.map((singleStock) => {
+  stocksArray.forEach((singleStock) => {
     const newStock = new Stock(singleStock);
     newStock.save((err, stock) => {
       console.log(`Creating Data Entry Company ${stock.id}/100`);
+
       if (err) throw err;
+
       if (stock.id === 100) {
         mongoose.disconnect();
       }
     });
   });
-  // })
 };
 
 const find = (id, endCallback) => {
