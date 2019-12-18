@@ -33,3 +33,18 @@ npm run build
 to compile with webpack and babel
 
 Open browser to localhost:3001
+
+## API
+
+# GET
+/api/graph/stockHistory[?id=<id>]
+
+# POST
+/api/graph/stockHistory
+
+# PUT
+/api/graph/stockHistory
+
+# DELETE
+/api/graph/stockHistory
+
