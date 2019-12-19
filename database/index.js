@@ -46,7 +46,7 @@ const createDbConn = async (scopeAuth) => {
 
   try {
     const res = await pool.query('SELECT NOW()');
-    console.log(`MySQL connected for '${env}' env to pool for database '${database}' at ${res}`);
+    console.log(`MySQL connected for '${env}' env to pool for database '${database}' at ${res.rows[0].now}`);
   } catch (error) {
     console.log(`error creating pool for database '${database}'`);
     console.log(error);

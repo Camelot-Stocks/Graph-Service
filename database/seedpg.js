@@ -13,6 +13,8 @@ const seed = async (dbConn) => {
   await cleanDbTables(conn);
   console.log('db cleaned');
 
+  
+
   await conn.end();
 };
 
