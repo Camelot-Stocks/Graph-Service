@@ -13,27 +13,32 @@ const createDbConn = async (scopeAuth) => {
 
   const client = new Client({
     host,
+    port,
+    database: 'postgres',
     user,
     password,
-    port,
   });
 
-  const database = `stockHistory_${env}`;
+  const database = `stockhistory_${env}`;
   try {
-    const query = `CREATE DATABASE IF NOT EXISTS ${database};`;
+    const query = `CREATE DATABASE ${database};`;
     await client.connect();
     await client.query(query);
     await client.end();
   } catch (error) {
-    console.log(error);
+    if (error.code !== '42P04') {
+      // print error if not for db already exists
+      console.log(error);
+    }
     await client.end();
   }
 
   const pool = new Pool({
     host,
+    port,
+    database,
     user,
     password,
-    database,
     // TODO - investigate options below
     // multipleStatements: true,
     // connectionLimit: 100,
