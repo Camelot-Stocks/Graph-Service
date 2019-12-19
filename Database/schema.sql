@@ -22,7 +22,7 @@ CREATE TABLE prices (
   priceId SERIAL PRIMARY KEY,
   stockId INT REFERENCES stocks,
   ts TIMESTAMPTZ,
-  -- break out timestamp into subcomponents to cluster for faster querying?
+  -- break out timestamp into subcomponents for faster querying?
   price NUMERIC(10,2)
 );
 
