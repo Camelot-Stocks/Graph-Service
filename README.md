@@ -37,18 +37,127 @@ Open browser to localhost:3001
 
 # API
 
-# Route
+## Route
 /api/graph/stockHistory
 
 ### GET
-/api/graph/stockHistory[?id=[ID]]
+/api/graph/stockHistory?id=[ID]&term=[TERM]
+
+ID = stock ticker, ex 'MSFT'
+
+TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
+
+#### Response:
+```javascript
+{
+  tags: (3) ["Top 100", "Technology", "Banking"],
+  historicPrice1D: (109) [166.09, …],
+  stockId: 8,
+  name: "American Express Co",
+  symbol: "AXP",
+  analystHold: 0,
+  robinhoodOwners: 28513,
+  price: 166.09,
+}
+```
+*historicPrice property that matches query term will be returned.
+
 
 ### POST
-/api/graph/stockHistory[?id=[ID]]
+/api/graph/stockHistory
+
+#### Body Format (JSON):
+```javascript
+{
+  [
+    {
+      timestamp: '1999-01-08 04:05:00 -8:00',
+      stockId: 8,
+      price: 166.09,
+    },
+    {
+      timestamp: '1999-01-08 04:10:00 -8:00',
+      stockId: 8,
+      price: 167.19,
+    },
+  ]
+}
+```
+timestamp will be rounded to nearest 5 minutes
+
+#### Response:
+created priceIds
+```javascript
+{
+  [
+    2348234,
+    1324358,
+  ]
+}
+```
+
 
 ### PUT
-/api/graph/stockHistory[?id=[ID]]
+/api/graph/stockHistory
+
+#### Body Format (JSON):
+```javascript
+{
+  [
+    {
+      timestamp: '1999-01-08 04:05:00 -8:00',
+      stockId: 8,
+      price: 166.09,
+    },
+    {
+      timestamp: '1999-01-08 04:10:00 -8:00',
+      stockId: 8,
+      price: 167.19,
+    },
+  ]
+}
+```
+timestamp will be rounded to nearest 5 minutes
+
+#### Response:
+updated priceIds
+```javascript
+{
+  [
+    2348234,
+    1324358,
+  ]
+}
+```
+
 
 ### DELETE
-/api/graph/stockHistory[?id=[ID]]
+/api/graph/stockHistory
 
+#### Body Format (JSON):
+```javascript
+{
+  {
+    startTimestamp: '1999-01-08 04:05:00 -8:00',
+    endTimestamp: '1999-01-09 04:05:00 -8:00',
+    stockId: 8,
+  },
+  {
+    startTimestamp: '1999-01-08 04:05:00 -8:00',
+    endTimestamp: '1999-01-09 04:05:00 -8:00',
+    stockId: 9,
+  },
+}
+```
+timestamp will be rounded to nearest 5 minutes
+
+#### Response:
+deleted priceIds
+```javascript
+{
+  [
+    2348234,
+    1324358,
+  ]
+}
+```
