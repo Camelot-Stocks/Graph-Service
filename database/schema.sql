@@ -29,11 +29,11 @@ CREATE TABLE users (
   firstname VARCHAR(35),
   lastname VARCHAR(35),
   balance NUMERIC(12,2)
-)
+);
 
 CREATE TABLE userStocks (
   user_stock_id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users,
   stock_id INT REFERENCES stocks,
   quantity INT
-)
+);

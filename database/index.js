@@ -1,12 +1,11 @@
 /* eslint-disable no-console */
 const { Pool, Client } = require('pg');
-// const fs = require('fs');
-// const path = require('path');
+const fs = require('fs');
+const path = require('path');
 const auth = require('./auth');
 
 const createDbConn = async (scopeAuth) => {
   const env = process.env.NODE_ENV || 'dev';
-  console.log(env);
   const {
     user, password, host, port,
   } = scopeAuth[env];
@@ -56,12 +55,12 @@ const createDbConn = async (scopeAuth) => {
   return pool;
 };
 
-// const createDbTables = (conn) => {
-//   const schemaFile = path.resolve(__dirname, 'schema.sql');
-//   const createDBQuery = fs.readFileSync(schemaFile).toString();
+const createDbTables = (conn) => {
+  const schemaFile = path.resolve(__dirname, 'schema.sql');
+  const createDBQuery = fs.readFileSync(schemaFile).toString();
 
-//   return conn.query(createDBQuery);
-// };
+  return conn.query(createDBQuery);
+};
 
 // const cleanDbTables = (conn) => {
 //   const query = `
@@ -78,7 +77,7 @@ const createDbConn = async (scopeAuth) => {
 // };
 
 module.exports = {
-  dbConn: createDbConn(auth).catch(console.log),
-  // createDbTables,
+  db: createDbConn(auth).catch(console.log),
+  createDbTables,
   // cleanDbTables,
 };
