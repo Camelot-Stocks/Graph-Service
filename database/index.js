@@ -42,8 +42,8 @@ const createDbConn = async (scopeAuth) => {
     // idleTimeoutMillis: 30000,
     // connectionTimeoutMillis: 2000,
   });
-
   pool.on('error', console.log);
+
   try {
     const res = await pool.query('SELECT NOW()');
     console.log(`MySQL connected for '${env}' env to pool for database '${database}' at ${res}`);
@@ -64,16 +64,12 @@ const createDbTables = (conn) => {
 
 const cleanDbTables = (conn) => {
   const query = `
-    SET FOREIGN_KEY_CHECKS = 0;
-
-    TRUNCATE TABLE user_stocks;
-    TRUNCATE TABLE users;
-    TRUNCATE TABLE prices;
-    TRUNCATE TABLE stock_tags;
-    TRUNCATE TABLE tags;
-    TRUNCATE TABLE stocks;
-
-    SET FOREIGN_KEY_CHECKS = 1;
+    TRUNCATE TABLE user_stocks CASCADE;
+    TRUNCATE TABLE users CASCADE;
+    TRUNCATE TABLE prices CASCADE;
+    TRUNCATE TABLE stock_tags CASCADE;
+    TRUNCATE TABLE tags CASCADE;
+    TRUNCATE TABLE stocks CASCADE;
   `;
   return conn.query(query);
 };

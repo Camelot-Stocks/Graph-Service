@@ -10,8 +10,8 @@ const seed = async (dbConn) => {
   await createDbTables(conn);
   console.log('db tables created');
 
-  // await cleanDbTables(conn);
-  // console.log('db cleaned');
+  await cleanDbTables(conn);
+  console.log('db cleaned');
 
   await conn.end();
 };
