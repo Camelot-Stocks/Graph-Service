@@ -15,37 +15,38 @@ const createDbConn = async (scopeAuth) => {
     user,
     password,
     port,
+  });
+
+  const database = `stockHistory_${env}`;
+  const query = `CREATE DATABASE IF NOT EXISTS ${database};`;
+  try {
+    await client.connect();
+    await client.query(query);
+    await client.end();
+  } catch (error) {
+    console.log(error);
+    await client.end();
+  }
+
+  const pool = new Pool({
+    host,
+    user,
+    password,
+    database,
+    // TODO - investigate options below
     // multipleStatements: true,
+    // connectionLimit: 100,
+    // queueLimit: 0,
   });
-  const conn = await pg.createConnection({
-  });
+  try {
+    const res = await pool.query('SELECT NOW()');
+    console.log(`MySQL connected for '${env}' env to pool for database '${database}' at ${res}`);
+  } catch (error) {
+    console.log(`error creating pool for database '${database}'`);
+    console.log(error);
+  }
 
-  // const database = `graph_${env}`;
-  // const query = `
-  //   CREATE DATABASE IF NOT EXISTS ${database};
-  //   USE ${database};
-  // `;
-  // await conn.query(query);
-  // await conn.end();
-
-  // let pool;
-  // try {
-  //   pool = pg.createPool({
-  //     host,
-  //     user,
-  //     database,
-  //     password,
-  //     multipleStatements: true,
-  //     connectionLimit: 10,
-  //     queueLimit: 0,
-  //   });
-  // } catch (error) {
-  //   console.log(`error creating pool for pg database '${database}'`);
-  //   console.log(error);
-  // }
-
-  // console.log(`MySQL connected for '${env}' env to database '${database}'`);
-  // return pool;
+  return pool;
 };
 
 // const createDbTables = (conn) => {
