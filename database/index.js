@@ -39,11 +39,12 @@ const createDbConn = async (scopeAuth) => {
     database,
     user,
     password,
-    // TODO - investigate options below
-    // multipleStatements: true,
-    // connectionLimit: 100,
-    // queueLimit: 0,
+    // max: 20,
+    // idleTimeoutMillis: 30000,
+    // connectionTimeoutMillis: 2000,
   });
+
+  pool.on('error', console.log);
   try {
     const res = await pool.query('SELECT NOW()');
     console.log(`MySQL connected for '${env}' env to pool for database '${database}' at ${res}`);
