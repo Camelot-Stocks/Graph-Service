@@ -16,6 +16,7 @@ CREATE TABLE prices (
   priceId INT,
   stockID INT,
   ts TIMESTAMP,
+  -- break out timestamp into subcomponents to cluster for faster querying?
   price DECIMAL(7,2),
-  PRIMARY KEY (stockId, ts)
+  PRIMARY KEY (priceId, stockId, ts)
 );
