@@ -6,6 +6,7 @@ const auth = require('./auth');
 
 const createDbConn = async (scopeAuth) => {
   const env = process.env.NODE_ENV || 'dev';
+  console.log(env);
   const {
     user, password, host, port,
   } = scopeAuth[env];
@@ -18,8 +19,8 @@ const createDbConn = async (scopeAuth) => {
   });
 
   const database = `stockHistory_${env}`;
-  const query = `CREATE DATABASE IF NOT EXISTS ${database};`;
   try {
+    const query = `CREATE DATABASE IF NOT EXISTS ${database};`;
     await client.connect();
     await client.query(query);
     await client.end();
