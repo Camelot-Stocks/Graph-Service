@@ -4,19 +4,19 @@ CREATE KEYSPACE IF NOT EXISTS stockHistory
 
 CREATE TABLE stocks (
   stockId INT,
-  name VARCHAR(50),
+  stockName VARCHAR(50),
   symbol CHAR(5),
   analystHold SMALLINT,
   robinhoodOwners INT,
-  tags list<VARCHAR(25)>,
+  tags list<VARCHAR(50)>,
   PRIMARY KEY (stockId, symbol, tags)
 );
 
 CREATE TABLE prices (
   priceId INT,
-  stockID INT,
+  stockId INT,
   ts TIMESTAMP,
   -- break out timestamp into subcomponents to cluster for faster querying?
-  price DECIMAL(7,2),
+  price DECIMAL(10,2),
   PRIMARY KEY (priceId, stockId, ts)
 );
