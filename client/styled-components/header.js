@@ -25,7 +25,7 @@ const Tags = styled.button`
   font-size: 13px;
   font-family: "DINPro-regular";
   background: ${(props) => {
-    console.log(props.backgroundColor);
+    // console.log(props.backgroundColor);
     return props.backgroundColor === 'white' ? '#e6f9f3' : '#182b27';
   }};
   color: ${(props) => (props.lineColor === '#21ce99' ? '#21ce99' : '#f45531')};
