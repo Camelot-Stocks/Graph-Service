@@ -20,3 +20,12 @@ CREATE TABLE prices (
   price DECIMAL(10,2),
   PRIMARY KEY (price_id, stock_id, ts)
 );
+
+CREATE TABLE users (
+  user_id INT,
+  firstname VARCHAR(35),
+  lastname VARCHAR(35),
+  balance NUMERIC(12,2),
+  stocks map<INT, INT>,
+  PRIMARY KEY (user_id)
+)
