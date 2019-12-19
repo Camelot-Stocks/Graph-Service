@@ -1,22 +1,22 @@
-CREATE TABLE stocks (
+CREATE TABLE IF NOT EXISTS stocks (
   stock_id SERIAL PRIMARY KEY,
   stock_name VARCHAR(50),
   symbol CHAR(5),
   analyst_hold SMALLINT
 );
 
-CREATE TABLE tags (
+CREATE TABLE IF NOT EXISTS tags (
   tag_id SERIAL PRIMARY KEY,
   tag_name VARCHAR(50)
 );
 
-CREATE TABLE stockTags (
+CREATE TABLE IF NOT EXISTS stock_tags (
   stock_tag_id SERIAL PRIMARY KEY,
   tag_id INT REFERENCES tags,
   stock_id INT REFERENCES stocks
 );
 
-CREATE TABLE prices (
+CREATE TABLE IF NOT EXISTS prices (
   price_id SERIAL PRIMARY KEY,
   stock_id INT REFERENCES stocks,
   ts TIMESTAMPTZ,
@@ -24,14 +24,14 @@ CREATE TABLE prices (
   price NUMERIC(10,2)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
   firstname VARCHAR(35),
   lastname VARCHAR(35),
   balance NUMERIC(12,2)
 );
 
-CREATE TABLE userStocks (
+CREATE TABLE IF NOT EXISTS user_stocks (
   user_stock_id SERIAL PRIMARY KEY,
   user_id INT REFERENCES users,
   stock_id INT REFERENCES stocks,

@@ -62,22 +62,24 @@ const createDbTables = (conn) => {
   return conn.query(createDBQuery);
 };
 
-// const cleanDbTables = (conn) => {
-//   const query = `
-//     SET FOREIGN_KEY_CHECKS = 0;
+const cleanDbTables = (conn) => {
+  const query = `
+    SET FOREIGN_KEY_CHECKS = 0;
 
-//     TRUNCATE TABLE rates;
-//     TRUNCATE TABLE lenders;
-//     TRUNCATE TABLE properties;
-//     TRUNCATE TABLE zips;
+    TRUNCATE TABLE user_stocks;
+    TRUNCATE TABLE users;
+    TRUNCATE TABLE prices;
+    TRUNCATE TABLE stock_tags;
+    TRUNCATE TABLE tags;
+    TRUNCATE TABLE stocks;
 
-//     SET FOREIGN_KEY_CHECKS = 1;
-//   `;
-//   return conn.query(query);
-// };
+    SET FOREIGN_KEY_CHECKS = 1;
+  `;
+  return conn.query(query);
+};
 
 module.exports = {
   db: createDbConn(auth).catch(console.log),
   createDbTables,
-  // cleanDbTables,
+  cleanDbTables,
 };
