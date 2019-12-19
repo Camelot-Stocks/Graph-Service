@@ -10,14 +10,14 @@ const test = {
   host: 'localhost',
 };
 
-const prod = {
-  user: 'prod',
-  password: 'prod',
+const production = {
+  user: 'production',
+  password: 'production',
   host: 'database',
 };
 
 module.exports = {
   dev,
   test,
-  prod,
+  production,
 };
