@@ -1,22 +1,22 @@
 CREATE KEYSPACE IF NOT EXISTS stockHistory
-    WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 2};
+    WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
     -- WITH replication = {'class': 'NetworkTopologyStrategy', 'DC1' : 2, 'DC2' : 2};
 
 CREATE TABLE stocks (
-  stockId INT,
-  stockName VARCHAR(50),
+  stock_id INT,
+  stock_name VARCHAR(50),
   symbol CHAR(5),
-  analystHold SMALLINT,
-  robinhoodOwners INT,
+  analyst_hold SMALLINT,
+  robinhood_owners INT,
   tags list<VARCHAR(50)>,
-  PRIMARY KEY (stockId, symbol, tags)
+  PRIMARY KEY (stock_id, symbol, tags)
 );
 
 CREATE TABLE prices (
-  priceId INT,
-  stockId INT,
+  price_id INT,
+  stock_id INT,
   ts TIMESTAMP,
   -- break out timestamp into subcomponents to cluster for faster querying?
   price DECIMAL(10,2),
-  PRIMARY KEY (priceId, stockId, ts)
+  PRIMARY KEY (price_id, stock_id, ts)
 );
