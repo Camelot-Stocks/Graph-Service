@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS stockHistory;
-
 CREATE TABLE stocks (
   stockId SERIAL PRIMARY KEY,
   stockName VARCHAR(50),
