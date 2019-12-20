@@ -36,11 +36,10 @@ const seedPrices = async (dbConn) => {
         const stock = stocks[stockIdx];
         const s = stock[0];
 
-        const priceCount = 5 * 8760 * 12;
-        const prices = genPriceHistory(priceCount);
+        const prices = genPriceHistory();
 
         let query = 'INSERT INTO prices (stock_symbol, ts, price) VALUES\n';
-        for (let j = 0; j < priceCount; j += 1) {
+        for (let j = 0; j < prices.length; j += 1) {
           const price = prices[j];
           const [ts, p] = price;
           query += `('${s}', '${ts}', ${p}),\n`;
