@@ -3,7 +3,7 @@ const fancy = require('fancy-log');
 const { db, createDbTables, cleanDbTables } = require('./index');
 const { genStocks, genPriceHistory } = require('./seeddatagen');
 
-const stocksCount = 20;
+const stocksCount = 2;
 let stocks;
 
 const seedStocks = (dbConn) => {
