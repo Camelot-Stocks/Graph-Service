@@ -1,7 +1,7 @@
 const faker = require('faker');
 
 const genStock = () => {
-  const name = faker.lorem.word();
+  const name = faker.lorem.words(3);
   const symbol = faker.random.alphaNumeric(5).toUpperCase();
   const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
   return [name, symbol, analystHold];
