@@ -16,6 +16,10 @@ const genStocks = (qty) => {
 // create stock_tags
 
 // create prices
+const genPriceHistory = (startVal, dir) => {
+  const prices = [];
+  return prices;
+};
 
 // create users
 
@@ -23,4 +27,5 @@ const genStocks = (qty) => {
 
 module.exports = {
   genStocks,
+  genPriceHistory,
 };
