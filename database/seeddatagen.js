@@ -16,13 +16,14 @@ const genStocks = (qty) => {
 // create stock_tags
 
 // create prices
-const genPriceHistory = (startPrice, trend, priceCount) => {
+const genPriceHistory = (priceCount) => {
   const prices = [];
-  let price = startPrice;
+  let price = faker.random.number({ min: 1, max: 1000, precision: 0.01 });
+  const trend = faker.random.number({ min: -1, max: 1, precision: 0.01 });
   // TODO - increment timestamps
   let ts = '2014-12-20 05:40:00';
   for (let i = 0; i < priceCount; i += 1) {
-    price = trend * faker.random.number({ min: -2, max: 2, precision: 0.01 });
+    price += trend * faker.random.number({ min: -0.1, max: 0.1, precision: 0.01 });
     prices.push([ts, price]);
   }
   return prices;
