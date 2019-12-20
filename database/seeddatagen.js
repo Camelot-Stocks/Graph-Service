@@ -21,7 +21,7 @@ const genPriceHistory = (priceCount) => {
   let price = faker.random.number({ min: 1, max: 1000, precision: 0.01 });
   const trend = faker.random.number({ min: -1, max: 1, precision: 0.01 });
   // TODO - increment timestamps
-  let ts = '2014-12-20 05:40:00';
+  const ts = '2015-01-01 00:00:00';
   for (let i = 0; i < priceCount; i += 1) {
     price += trend * faker.random.number({ min: 0, max: 0.1, precision: 0.01 });
     prices.push([ts, price]);
