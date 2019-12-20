@@ -1,29 +1,36 @@
 /* eslint-disable no-console */
 const { db, createDbTables, cleanDbTables } = require('./index');
-const { genStock } = require('./seeddatagen');
+const { genStocks } = require('./seeddatagen');
 
 const seedInc = 10000;
+const stocksCount = 200;
+let stocks;
 
 const seedStocks = (dbConn) => {
-  let stocksTotal = 200;
-  const inc = Math.min(seedInc, stocksTotal);
-
   // const prepQuery = `PREPARE seedStocks () AS
   //   INSERT INTO stocks (stock_name, symbol, analyst_hold) VALUES($1, $2, $3);`;
-  const queries = [];
 
-  while (stocksTotal > 0) {
-    let query = '';
-    for (let i = 0; i < inc; i += 1) {
-      const [n, s, a] = genStock();
-      query += `INSERT INTO stocks (stock_name, symbol, analyst_hold) VALUES ('${n}', '${s}', ${a});\n`;
-    }
+  // const queries = [];
 
-    queries.push(dbConn.query(query));
-    stocksTotal -= inc;
-    console.log(`${stocksTotal} stocks remaining`);
+  // const inc = Math.min(seedInc, stocksCount);
+  // while (stocksCount > 0) {
+  //   let query = '';
+  //   for (let i = 0; i < inc; i += 1) {
+  //     query += `INSERT INTO stocks (stock_name, symbol, analyst_hold) VALUES ('${n}', '${s}', ${a});\n`;
+  //   }
+
+  //   queries.push(dbConn.query(query));
+  //   stocksCount -= inc;
+  //   console.log(`${stocksCount} stocks remaining`);
+  // }
+  stocks = genStocks(stocksCount);
+  let query = '';
+  for (let i = 0; i < stocksCount; i += 1) {
+    const [n, s, a] = stocks[i];
+    query += `INSERT INTO stocks (stock_name, symbol, analyst_hold) VALUES ('${n}', '${s}', ${a});\n`;
   }
-  return Promise.all(queries);
+
+  return dbConn.query(query);
 };
 
 const seed = async (dbConn) => {

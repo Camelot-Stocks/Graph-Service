@@ -1,10 +1,14 @@
 const faker = require('faker');
 
-const genStock = () => {
-  const name = faker.lorem.words(3);
-  const symbol = faker.random.alphaNumeric(5).toUpperCase();
-  const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
-  return [name, symbol, analystHold];
+const genStocks = (qty) => {
+  const stocks = [];
+  for (let i = 0; i < qty; i += 1) {
+    const name = faker.lorem.words(3);
+    const symbol = faker.random.alphaNumeric(5).toUpperCase();
+    const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
+    stocks.push([name, symbol, analystHold]);
+  }
+  return stocks;
 };
 
 // create tags
@@ -18,5 +22,5 @@ const genStock = () => {
 // create user_stocks
 
 module.exports = {
-  genStock,
+  genStocks,
 };
