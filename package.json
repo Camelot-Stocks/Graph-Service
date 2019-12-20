@@ -8,7 +8,8 @@
     "start:dev": "nodemon --inspect server/server.js",
     "build": "webpack --mode=production",
     "build:dev": "webpack -w -d",
-    "seed": "node database/seedpg.js",
+    "seedpg": "node database/seedpg.js",
+    "seedpg:test": "node --inspect-brk database/seedpg.js",
     "test": "jest --coverage --colors",
     "test:watch": "jest --watch --coverage",
     "lint": "eslint --ext .js,.jsx ."
