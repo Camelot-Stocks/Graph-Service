@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const fancy = require('fancy-log');
+const faker = require('faker');
 const { db, createDbTables, cleanDbTables } = require('./index');
 const { genStocks, genTags, genPriceHistory } = require('./seeddatagen');
 
@@ -14,6 +15,32 @@ const seedStocks = (dbConn) => {
     const [s, n, a] = stocks[i];
     query += `INSERT INTO stocks (stock_symbol, stock_name, analyst_hold) VALUES ('${s}', '${n}', ${a});\n`;
   }
+
+  return dbConn.query(query);
+};
+
+const seedTags = async (dbConn) => {
+  const tags = genTags();
+
+  let query = 'INSERT INTO tags (tag_name) VALUES\n';
+  for (let i = 0; i < tags.length; i += 1) {
+    const tag = tags[i];
+    query += `('${tag}'),\n`;
+  }
+  query = `${query.substring(0, query.length - 2)} RETURNING tag_id;`;
+
+  return dbConn.query(query);
+};
+
+const seedStockTags = async (dbConn) => {
+  const stockTagsCount = 500;
+  let query = 'INSERT INTO stock_tags (tag_id, stock_symbol) VALUES\n';
+  for (let i = 0; i < stockTagsCount; i += 1) {
+    const tagId = tagsIds[faker.random.number(tagsIds.length - 1)];
+    const stockSymbol = stocks[faker.random.number(stocks.length - 1)][0];
+    query += `('${tagId}', '${stockSymbol}'),\n`;
+  }
+  query = `${query.substring(0, query.length - 2)};`;
 
   return dbConn.query(query);
 };
@@ -60,19 +87,6 @@ const seedPrices = async (dbConn) => {
   return Promise.all(queryChains);
 };
 
-const seedTags = async (dbConn) => {
-  const tags = genTags();
-
-  let query = 'INSERT INTO tags (tag_name) VALUES\n';
-  for (let j = 0; j < tags.length; j += 1) {
-    const tag = tags[j];
-    query += `('${tag}'),\n`;
-  }
-  query = `${query.substring(0, query.length - 2)} RETURNING tag_id;`;
-
-  return dbConn.query(query);
-};
-
 const seed = async (dbConn) => {
   const conn = await dbConn;
 
@@ -88,6 +102,9 @@ const seed = async (dbConn) => {
   const res = await seedTags(conn);
   tagsIds = res.rows.map((row) => row.tag_id);
   fancy('seeded tags table');
+
+  await seedStockTags(conn);
+  fancy('seeded stock_tags table');
 
   await seedPrices(conn);
   fancy('seeded prices table');

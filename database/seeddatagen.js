@@ -26,8 +26,6 @@ const genTags = () => {
   return [...tags];
 };
 
-// create stock_tags
-
 const genPriceHistory = () => {
   let price = faker.random.number({ min: 1, max: 1000, precision: 0.01 });
   let trend = faker.random.number({ min: -1, max: 1, precision: 0.01 });
