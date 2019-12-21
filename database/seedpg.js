@@ -3,7 +3,7 @@ const fancy = require('fancy-log');
 const faker = require('faker');
 const { db, createDbTables, cleanDbTables } = require('./index');
 const {
-  genStocks, genTags, genUsers, genPriceHistory,
+  genStocks, genTags, genUsers, genUserStocks, genPriceHistory,
 } = require('./seeddatagen');
 
 const stocksCount = 2;
@@ -62,14 +62,14 @@ const seedUsers = async (dbConn) => {
 };
 
 const seedUserStocks = async (dbConn) => {
-  // const tags = genTags();
+  const userStocks = genUserStocks(userIds, stocks);
 
-  const query = 'INSERT INTO tags (tag_name) VALUES\n';
-  // for (let i = 0; i < tags.length; i += 1) {
-  //   const tag = tags[i];
-  //   query += `('${tag}'),\n`;
-  // }
-  // query = `${query.substring(0, query.length - 2)} RETURNING tag_id;`;
+  let query = 'INSERT INTO user_stocks (user_id, stock_symbol, quantity) VALUES\n';
+  for (let i = 0; i < userStocks.length; i += 1) {
+    const [u, s, q] = userStocks[i];
+    query += `('${u}', '${s}', '${q}'),\n`;
+  }
+  query = `${query.substring(0, query.length - 2)};`;
 
   return dbConn.query(query);
 };
@@ -137,11 +137,10 @@ const seed = async (dbConn) => {
 
   const usersRes = await seedUsers(conn);
   userIds = usersRes.rows.map((row) => row.user_id);
-  debugger;
   fancy('seeded users table');
 
-  // await seedUserStocks(conn);
-  // fancy('seeded user_stocks table');
+  await seedUserStocks(conn);
+  fancy('seeded user_stocks table');
 
   fancy('seeding prices table...');
   await seedPrices(conn);

@@ -26,22 +26,28 @@ const genTags = () => {
   return [...tags];
 };
 
-// create users
 const genUsers = () => {
   const userCount = 100000;
   const users = [];
   for (let i = 0; i < userCount; i += 1) {
     const firstname = faker.name.firstName().replace('\'', '');
     const lastname = faker.name.lastName().replace('\'', '');
-    const balance = faker.random.number({ min: 0, max: 10000000, precision: 0.01 });
+    const balance = faker.random.number({ min: 0, max: 5000000, precision: 0.01 });
     users.push([firstname, lastname, balance]);
   }
   return users;
 };
 
-// create user_stocks
-const genUserStocks = () => {
-
+const genUserStocks = (userIds, stocks) => {
+  const userStocksCount = 300000;
+  const userStocks = [];
+  for (let i = 0; i < userStocksCount; i += 1) {
+    const userId = userIds[faker.random.number(userIds.length - 1)];
+    const stockSymbol = stocks[faker.random.number(stocks.length - 1)][0];
+    const qty = faker.random.number(10000);
+    userStocks.push([userId, stockSymbol, qty]);
+  }
+  return userStocks;
 };
 
 const genPriceHistory = () => {
