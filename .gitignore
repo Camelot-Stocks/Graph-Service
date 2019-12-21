@@ -1,3 +1,5 @@
 node_modules
 coverage
 Public/main.js
+database/seedFiles
+

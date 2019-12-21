@@ -1,7 +1,18 @@
-const { dbConn } = require('./indexcs');
+const { Client } = require('cassandra-driver');
+const fancy = require('fancy-log');
+const { clientOptions } = require('./authcs');
+const {
+  genStocksCSV,
+} = require('./seeddatagen');
+
 
 const seed = async () => {
-  await dbConn;
+  const client = new Client(clientOptions);
+
+  const stocksCount = 200;
+  const [csvFile, symbols] = await genStocksCSV(stocksCount);
+
+  await client.shutdown();
 };
 
-seed();
+seed().catch(fancy);

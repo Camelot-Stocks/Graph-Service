@@ -1,5 +1,7 @@
 const faker = require('faker');
 const moment = require('moment');
+const fs = require('fs');
+const path = require('path');
 
 const genStocks = (qty) => {
   const stocks = [];
@@ -11,6 +13,39 @@ const genStocks = (qty) => {
     stocks.push([symbol, name, owners, analystHold]);
   }
   return stocks;
+};
+
+const genStocksCSV = async (qty) => {
+  const csvFile = path.resolve(__dirname, 'seedFiles', 'stocks.csv');
+  const encoding = 'utf-8';
+  const writer = fs.createWriteStream(csvFile);
+  let i = qty;
+
+  const write = (cb) => {
+    const symbols = [];
+    let canWrite = true;
+    do {
+      i -= 1;
+      const symbol = faker.random.alphaNumeric(5).toUpperCase();
+      symbols.push(symbols);
+      const name = faker.company.companyName().replace('\'', '');
+      const owners = faker.random.number(20000);
+      const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
+      const row = `'${symbol}','${name}',${owners},${analystHold}\n`;
+
+      if (i === 0) {
+        writer.write(row, encoding, cb([csvFile, symbols]));
+      } else {
+        canWrite = writer.write(row, encoding);
+      }
+    } while (i > 0 && canWrite);
+
+    if (i > 0) {
+      writer.once('drain', write);
+    }
+  };
+
+  return new Promise((resolve) => write(resolve));
 };
 
 const genTags = () => {
@@ -74,6 +109,7 @@ const genPriceHistory = () => {
 
 module.exports = {
   genStocks,
+  genStocksCSV,
   genTags,
   genUsers,
   genUserStocks,
