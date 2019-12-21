@@ -15,8 +15,8 @@ const seedStocks = (dbConn) => {
   stocks = genStocks(stocksCount);
   let query = '';
   for (let i = 0; i < stocksCount; i += 1) {
-    const [s, n, a] = stocks[i];
-    query += `INSERT INTO stocks (stock_symbol, stock_name, analyst_hold) VALUES ('${s}', '${n}', ${a});\n`;
+    const [s, n, o, a] = stocks[i];
+    query += `INSERT INTO stocks (stock_symbol, stock_name, owners, analyst_hold) VALUES ('${s}', '${n}', ${o}, ${a});\n`;
   }
 
   return dbConn.query(query);

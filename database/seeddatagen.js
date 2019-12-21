@@ -6,8 +6,9 @@ const genStocks = (qty) => {
   for (let i = 0; i < qty; i += 1) {
     const symbol = faker.random.alphaNumeric(5).toUpperCase();
     const name = faker.company.companyName().replace('\'', '');
+    const owners = faker.random.number(20000);
     const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
-    stocks.push([symbol, name, analystHold]);
+    stocks.push([symbol, name, owners, analystHold]);
   }
   return stocks;
 };
@@ -59,7 +60,7 @@ const genPriceHistory = () => {
   const prices = [];
   for (let i = 0; i < priceCount; i += 1) {
     const ts = time.format('YYYY-MM-DD HH:mm:ssZZ').substring(0, 22);
-    price = Math.min(price + trend * faker.random.number({ min: 0, max: 1, precision: 0.01 }),
+    price = Math.max(price + trend * faker.random.number({ min: 0, max: 1, precision: 0.01 }),
       0.05);
     prices.push([ts, price]);
 
