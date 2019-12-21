@@ -6,7 +6,7 @@ const {
   genStocks, genTags, genUsers, genUserStocks, genPriceHistory,
 } = require('./seeddatagen');
 
-const stocksCount = 2;
+const stocksCount = 200;
 let stocks;
 let tagsIds;
 let userIds;
@@ -103,7 +103,7 @@ const seedPrices = async (dbConn) => {
         }
         query = `${query.substring(0, query.length - 2)};`;
 
-        fancy(`initiated db insert for stock ${stockIdx + 1}/${stocksCount} prices`);
+        fancy(`initiated db prices insert for stock ${stockIdx + 1}/${stocksCount}`);
         return dbConn.query(query);
       })
     ), Promise.resolve())
