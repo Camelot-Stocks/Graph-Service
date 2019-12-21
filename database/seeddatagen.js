@@ -59,7 +59,8 @@ const genPriceHistory = () => {
   const prices = [];
   for (let i = 0; i < priceCount; i += 1) {
     const ts = time.format('YYYY-MM-DD HH:mm:ssZZ').substring(0, 22);
-    price = Math.min(trend * faker.random.number({ min: 0, max: 1, precision: 0.01 }), 0.05);
+    price = Math.min(price + trend * faker.random.number({ min: 0, max: 1, precision: 0.01 }),
+      0.05);
     prices.push([ts, price]);
 
     time.add(5, 'minutes');
