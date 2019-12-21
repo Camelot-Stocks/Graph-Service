@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS stocks (
   -- stock_id SERIAL,
   stock_symbol CHAR(5) PRIMARY KEY,
   stock_name VARCHAR(50),
+  owners INT,
   analyst_hold SMALLINT
 );
 
