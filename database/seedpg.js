@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
 const fancy = require('fancy-log');
 const { db, createDbTables, cleanDbTables } = require('./index');
-const { genStocks, genPriceHistory } = require('./seeddatagen');
+const { genStocks, genTags, genPriceHistory } = require('./seeddatagen');
 
 const stocksCount = 2;
 let stocks;
+let tagsIds;
 
 const seedStocks = (dbConn) => {
   stocks = genStocks(stocksCount);
@@ -59,6 +60,19 @@ const seedPrices = async (dbConn) => {
   return Promise.all(queryChains);
 };
 
+const seedTags = async (dbConn) => {
+  const tags = genTags();
+
+  let query = 'INSERT INTO tags (tag_name) VALUES\n';
+  for (let j = 0; j < tags.length; j += 1) {
+    const tag = tags[j];
+    query += `('${tag}'),\n`;
+  }
+  query = `${query.substring(0, query.length - 2)} RETURNING tag_id;`;
+
+  return dbConn.query(query);
+};
+
 const seed = async (dbConn) => {
   const conn = await dbConn;
 
@@ -70,6 +84,10 @@ const seed = async (dbConn) => {
 
   await seedStocks(conn);
   fancy('seeded stocks table');
+
+  const res = await seedTags(conn);
+  tagsIds = res.rows.map((row) => row.tag_id);
+  fancy('seeded tags table');
 
   await seedPrices(conn);
   fancy('seeded prices table');

@@ -12,10 +12,21 @@ const genStocks = (qty) => {
   return stocks;
 };
 
-// create tags
+const genTags = () => {
+  const tagCount = 20;
+  const tags = new Set();
+
+  while (tags.size < tagCount) {
+    tags.add(faker.commerce.department());
+  }
+
+  tags.add('Top 100');
+  tags.add('So Hot Right Now');
+
+  return [...tags];
+};
 
 // create stock_tags
-
 
 const genPriceHistory = () => {
   let price = faker.random.number({ min: 1, max: 1000, precision: 0.01 });
@@ -43,5 +54,6 @@ const genPriceHistory = () => {
 
 module.exports = {
   genStocks,
+  genTags,
   genPriceHistory,
 };
