@@ -10,6 +10,8 @@
     "build:dev": "webpack -w -d",
     "seedpg": "node database/seedpg.js",
     "seedpg:test": "node --inspect-brk database/seedpg.js",
+    "seedcs": "node database/seedcs.js",
+    "seedcs:test": "node --inspect-brk database/seedcs.js",
     "test": "jest --coverage --colors",
     "test:watch": "jest --watch --coverage",
     "lint": "eslint --ext .js,.jsx ."

@@ -1,8 +1,8 @@
-CREATE KEYSPACE IF NOT EXISTS stockHistory
+CREATE KEYSPACE IF NOT EXISTS stock_history
     WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
     -- WITH replication = {'class': 'NetworkTopologyStrategy', 'DC1' : 2, 'DC2' : 2};
 
-USE stockHistory;
+USE stock_history;
 
 CREATE TABLE IF NOT EXISTS stocks (
   symbol VARCHAR,
