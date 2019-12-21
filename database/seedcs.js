@@ -9,7 +9,7 @@ const {
 const seed = async () => {
   const client = new Client(clientOptions);
 
-  const stocksCount = 200;
+  const stocksCount = 2000000;
   const [csvFile, symbols] = await genStocksCSV(stocksCount);
 
   debugger;

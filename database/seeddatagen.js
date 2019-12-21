@@ -2,6 +2,7 @@ const faker = require('faker');
 const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
+const fancy = require('fancy-log');
 
 const genStocks = (qty) => {
   const stocks = [];
@@ -16,7 +17,8 @@ const genStocks = (qty) => {
 };
 
 const genStocksCSV = async (qty) => {
-  const csvFile = path.resolve(__dirname, 'seedFiles', 'stocks.csv');
+  const filename = 'stocks.csv';
+  const csvFile = path.resolve(__dirname, 'seedFiles', filename);
   const encoding = 'utf-8';
   const writer = fs.createWriteStream(csvFile);
   let i = qty;
@@ -33,15 +35,19 @@ const genStocksCSV = async (qty) => {
       const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
       const row = `'${symbol}','${name}',${owners},${analystHold}\n`;
 
+      if (i % 50000 === 0) {
+        fancy(`${qty - i} rows written for ${filename}`);
+      }
+
       if (i === 0) {
-        writer.write(row, encoding, cb([csvFile, symbols]));
+        writer.write(row, encoding, () => cb([csvFile, symbols]));
       } else {
         canWrite = writer.write(row, encoding);
       }
     } while (i > 0 && canWrite);
 
     if (i > 0) {
-      writer.once('drain', write);
+      writer.once('drain', () => write(cb));
     }
   };
 
