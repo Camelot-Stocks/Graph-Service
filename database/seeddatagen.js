@@ -5,7 +5,7 @@ const genStocks = (qty) => {
   const stocks = [];
   for (let i = 0; i < qty; i += 1) {
     const symbol = faker.random.alphaNumeric(5).toUpperCase();
-    const name = faker.lorem.words(3);
+    const name = faker.company.companyName().replace('\'', '');
     const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
     stocks.push([symbol, name, analystHold]);
   }
@@ -24,6 +24,24 @@ const genTags = () => {
   tags.add('So Hot Right Now');
 
   return [...tags];
+};
+
+// create users
+const genUsers = () => {
+  const userCount = 100000;
+  const users = [];
+  for (let i = 0; i < userCount; i += 1) {
+    const firstname = faker.name.firstName().replace('\'', '');
+    const lastname = faker.name.lastName().replace('\'', '');
+    const balance = faker.random.number({ min: 0, max: 10000000, precision: 0.01 });
+    users.push([firstname, lastname, balance]);
+  }
+  return users;
+};
+
+// create user_stocks
+const genUserStocks = () => {
+
 };
 
 const genPriceHistory = () => {
@@ -46,12 +64,10 @@ const genPriceHistory = () => {
   return prices;
 };
 
-// create users
-
-// create user_stocks
-
 module.exports = {
   genStocks,
   genTags,
+  genUsers,
+  genUserStocks,
   genPriceHistory,
 };
