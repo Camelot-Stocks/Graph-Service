@@ -28,7 +28,7 @@ const genStocksCSV = async (qty) => {
       i -= 1;
       const symbol = faker.random.alphaNumeric(5).toUpperCase();
       symbols.push(symbols);
-      const name = faker.company.companyName().replace('\'', '');
+      const name = faker.company.companyName().replace(/'|,/g, '');
       const owners = faker.random.number(20000);
       const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
       const row = `'${symbol}','${name}',${owners},${analystHold}\n`;

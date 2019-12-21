@@ -12,6 +12,8 @@ const seed = async () => {
   const stocksCount = 200;
   const [csvFile, symbols] = await genStocksCSV(stocksCount);
 
+  debugger;
+
   await client.shutdown();
 };
 
