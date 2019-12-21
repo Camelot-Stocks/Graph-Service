@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS prices (
   price DECIMAL,
   PRIMARY KEY (symbol, ts)
 );
+-- break out timestamp into subcomponents to cluster for faster querying?
 
 CREATE TABLE IF NOT EXISTS users (
   user_id INT,
@@ -36,4 +37,3 @@ CREATE TABLE IF NOT EXISTS users (
   PRIMARY KEY (user_id)
 );
 
--- break out timestamp into subcomponents to cluster for faster querying?
