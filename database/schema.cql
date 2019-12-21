@@ -11,13 +11,15 @@ CREATE TABLE stocks (
   PRIMARY KEY (symbol, tags)
 );
 
+-- separate stocktags table focused on that query
+
 CREATE TABLE prices (
   price_id INT,
   symbol CHAR(5),
   ts TIMESTAMP,
   -- break out timestamp into subcomponents to cluster for faster querying?
   price DECIMAL(10,2),
-  PRIMARY KEY (price_id, symbol, ts)
+  PRIMARY KEY (symbol, ts)
 );
 
 CREATE TABLE users (
