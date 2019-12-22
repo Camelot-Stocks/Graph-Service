@@ -56,7 +56,7 @@ const chainAsyncFuncCalls = (asyncFunc, totalLinkCount, callsArgGenerator, chain
 
         return linkIdx >= totalLinkCount
           ? Promise.resolve()
-          : asyncFunc(...(callsArgGenerator(linkIdx)));
+          : asyncFunc(...callsArgGenerator(linkIdx));
       })
     ), Promise.resolve())
   );
