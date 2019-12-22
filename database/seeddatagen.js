@@ -41,6 +41,33 @@ const genCSV = async (filename, genRow, rowCount, genRowArgs) => {
   return new Promise((resolve) => write(rowCount, rowCount, resolve));
 };
 
+const chainAsyncFuncCalls = (asyncFunc, totalLinkCount, callsArgGenerator, chainCount = 5) => {
+  const chains = [];
+  const chainLinkCount = Math.ceil(totalLinkCount / chainCount);
+  const chainLinksIdxs = [];
+  for (let i = 0; i < chainLinkCount; i += 1) {
+    chainLinksIdxs.push(i);
+  }
+
+  const chain = (chainId, cLIs) => (
+    cLIs.reduce((chainLink, cLI) => (
+      chainLink.then(() => {
+        const linkIdx = cLI + chainLinkCount * chainId;
+
+        return linkIdx >= totalLinkCount
+          ? Promise.resolve()
+          : asyncFunc(...(callsArgGenerator(linkIdx)));
+      })
+    ), Promise.resolve())
+  );
+
+  for (let chainId = 0; chainId < chainCount; chainId += 1) {
+    chains.push(chain(chainId, chainLinksIdxs));
+  }
+
+  return Promise.all(chains);
+};
+
 const genStockRow = () => {
   const symbol = faker.random.alphaNumeric(5).toUpperCase();
   const name = faker.company.companyName().replace(/'|,/g, '');
@@ -143,6 +170,7 @@ const genPriceHistory = () => {
 
 module.exports = {
   genCSV,
+  chainAsyncFuncCalls,
   genStockRow,
   genPriceHistoryRows,
   genStocks,
