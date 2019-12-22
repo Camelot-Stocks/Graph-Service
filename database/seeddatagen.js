@@ -54,6 +54,44 @@ const genStocksCSV = async (qty) => {
   return new Promise((resolve) => write(resolve));
 };
 
+const genCSV = async (filename, rowCount) => {
+  const csvFile = path.resolve(__dirname, 'seedFiles', filename);
+  const encoding = 'utf-8';
+  const writer = fs.createWriteStream(csvFile);
+  let i = rowCount;
+
+  const write = (cb) => {
+    const rowIds = [];
+    let canWrite = true;
+    do {
+      i -= 1;
+      // TODO - move below to separate func to reuse genCSV
+      const symbol = faker.random.alphaNumeric(5).toUpperCase();
+      const name = faker.company.companyName().replace(/'|,/g, '');
+      const owners = faker.random.number(20000);
+      const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
+      const row = `'${symbol}','${name}',${owners},${analystHold}\n`;
+      rowIds.push(symbol);
+
+      if (i % 50000 === 0) {
+        fancy(`${rowCount - i} rows written for ${filename}`);
+      }
+
+      if (i === 0) {
+        writer.write(row, encoding, () => cb(rowIds));
+      } else {
+        canWrite = writer.write(row, encoding);
+      }
+    } while (i > 0 && canWrite);
+
+    if (i > 0) {
+      writer.once('drain', () => write(cb));
+    }
+  };
+
+  return new Promise((resolve) => write(resolve));
+};
+
 const genTags = () => {
   const tagCount = 20;
   const tags = new Set();
@@ -116,6 +154,7 @@ const genPriceHistory = () => {
 module.exports = {
   genStocks,
   genStocksCSV,
+  genCSV,
   genTags,
   genUsers,
   genUserStocks,

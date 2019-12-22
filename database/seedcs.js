@@ -10,9 +10,8 @@ const seed = async () => {
   const client = new Client(clientOptions);
 
   const stocksCount = 2000000;
+  // eslint-disable-next-line no-unused-vars
   const [csvFile, symbols] = await genStocksCSV(stocksCount);
-
-  debugger;
 
   await client.shutdown();
 };
