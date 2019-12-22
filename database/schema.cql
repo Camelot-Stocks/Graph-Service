@@ -1,10 +1,12 @@
+DROP KEYSPACE IF EXISTS stock_history;
+
 CREATE KEYSPACE IF NOT EXISTS stock_history
-    WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 3};
+    WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
     -- WITH replication = {'class': 'NetworkTopologyStrategy', 'DC1' : 2, 'DC2' : 2};
 
 USE stock_history;
 
-CREATE TABLE IF NOT EXISTS stocks (
+CREATE TABLE stocks (
   symbol VARCHAR,
   stock_name VARCHAR,
   analyst_hold SMALLINT,
@@ -12,15 +14,13 @@ CREATE TABLE IF NOT EXISTS stocks (
   PRIMARY KEY (symbol)
 );
 
-CREATE TABLE IF NOT EXISTS stock_tags (
-  stock_tag_id INT,
+CREATE TABLE stock_tags (
   symbol VARCHAR,
   tag VARCHAR,
   PRIMARY KEY (symbol, tag)
 );
 
-CREATE TABLE IF NOT EXISTS prices (
-  price_id INT,
+CREATE TABLE prices (
   symbol VARCHAR,
   ts TIMESTAMP,
   price DECIMAL,
@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS prices (
 );
 -- break out timestamp into subcomponents to cluster for faster querying?
 
-CREATE TABLE IF NOT EXISTS users (
-  user_id INT,
+CREATE TABLE users (
+  user_id UUID,
   firstname VARCHAR,
   lastname VARCHAR,
   balance DECIMAL,
-  stocks map<INT, INT>,
+  stocks map<VARCHAR, INT>,
   PRIMARY KEY (user_id)
 );
 
