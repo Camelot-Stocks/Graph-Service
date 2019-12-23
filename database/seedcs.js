@@ -1,6 +1,8 @@
 const { Client } = require('cassandra-driver');
 const fancy = require('fancy-log');
 const path = require('path');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 const { clientOptions } = require('./authcs');
 const {
   chainAsyncFuncCalls,
@@ -20,11 +22,11 @@ const seed = async () => {
     await genCSV(filename, genBatch, batchCount, genBatchArgs);
 
     const csvFile = path.resolve(__dirname, 'seedFiles', filename);
-    const query = `COPY stock_history.prices (symbol,ts,price)
-      FROM ${csvFile} WITH DELIMITER=',' AND HEADER=FALSE`;
+    const command = `COPY stock_history.prices (symbol,ts,price)
+      FROM '${csvFile}' WITH DELIMITER=',' AND HEADER=FALSE`;
 
     fancy(`starting db insert for ${filename}`);
-    await client.execute(query).catch(fancy);
+    await exec(`cqlsh -e "${command}"`).catch(fancy);
     fancy(`finished db insert for ${filename}`);
   }, stocksCount, (i) => (
     [`prices${i}.csv`, genPriceHistoryRows, 1, stockIds[i]]

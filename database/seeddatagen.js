@@ -3,6 +3,7 @@ const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
+const uuid = require('uuid/v4');
 
 
 const genCSV = async (filename, genRow, rowCount, genRowArgs) => {
@@ -73,7 +74,7 @@ const genStockRow = () => {
   const name = faker.company.companyName().replace(/'|,/g, '');
   const owners = faker.random.number(20000);
   const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
-  return [symbol, `'${symbol}', '${name}', ${owners}, ${analystHold}\n`];
+  return [symbol, `${symbol},${name},${owners},${analystHold}\n`];
 };
 
 const genPriceHistoryRows = (symbol) => {
@@ -84,10 +85,11 @@ const genPriceHistoryRows = (symbol) => {
   const priceCount = 5 * 8760 * 12;
   let rowsStr = '';
   for (let i = 0; i < priceCount; i += 1) {
-    const ts = time.format('YYYY-MM-DD HH:mm:ssZZ').substring(0, 22);
+    // const ts = time.format('YYYY-MM-DD HH:mm:ssZZ').substring(0, 22);
+    const ts = time.format('YYYY-MM-DD HH:mm:ssZZ');
     price = Math.max(Math.round(100 * price + trend
       * faker.random.number({ min: 0, max: 1, precision: 0.01 })) / 100, 0.05);
-    rowsStr += `'${symbol}', '${ts}', ${price}\n`;
+    rowsStr += `${symbol},${ts},${price}\n`;
 
     time.add(5, 'minutes');
     if (faker.random.number(100) > 97) {
