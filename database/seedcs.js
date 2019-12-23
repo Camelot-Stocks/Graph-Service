@@ -11,6 +11,14 @@ const {
   genPriceHistoryRows,
 } = require('./seeddatagen');
 
+const copyCSV = async (filename, table, tableColsStr) => {
+  const csvFile = path.resolve(__dirname, 'seedFiles', filename);
+  const command = `COPY stock_history.${table} (${tableColsStr})
+    FROM '${csvFile}' WITH DELIMITER=',' AND HEADER=FALSE`;
+
+  fancy(`starting db insert for ${filename}`);
+  return exec(`cqlsh -e "${command}"`).catch(fancy);
+};
 
 const seed = async () => {
   const client = new Client(clientOptions);
@@ -22,17 +30,14 @@ const seed = async () => {
   fancy('truncated existing table data');
 
   const stocksCount = 1;
-  const stockIds = await genCSV('stocks.csv', genStockRow, stocksCount);
+  const stocksFilename = 'stocks.csv';
+  const stockIds = await genCSV(stocksFilename, genStockRow, stocksCount);
+  await copyCSV(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
 
   await chainAsyncFuncCalls(async (filename, genBatch, batchCount, genBatchArgs) => {
     await genCSV(filename, genBatch, batchCount, genBatchArgs);
 
-    const csvFile = path.resolve(__dirname, 'seedFiles', filename);
-    const command = `COPY stock_history.prices (symbol,ts,price)
-      FROM '${csvFile}' WITH DELIMITER=',' AND HEADER=FALSE`;
-
-    fancy(`starting db insert for ${filename}`);
-    return exec(`cqlsh -e "${command}"`).catch(fancy);
+    return copyCSV(filename, 'prices', 'symbol,ts,price');
   }, stocksCount, (i) => (
     [`prices${i}.csv`, genPriceHistoryRows, 1, stockIds[i]]
   ));
