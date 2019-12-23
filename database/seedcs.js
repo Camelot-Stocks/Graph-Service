@@ -15,7 +15,13 @@ const {
 const seed = async () => {
   const client = new Client(clientOptions);
 
-  const stocksCount = 2;
+  await client.execute('TRUNCATE stock_history.stocks');
+  await client.execute('TRUNCATE stock_history.stock_tags');
+  await client.execute('TRUNCATE stock_history.prices');
+  await client.execute('TRUNCATE stock_history.users');
+  fancy('truncated existing table data');
+
+  const stocksCount = 1;
   const stockIds = await genCSV('stocks.csv', genStockRow, stocksCount);
 
   await chainAsyncFuncCalls(async (filename, genBatch, batchCount, genBatchArgs) => {
@@ -26,8 +32,7 @@ const seed = async () => {
       FROM '${csvFile}' WITH DELIMITER=',' AND HEADER=FALSE`;
 
     fancy(`starting db insert for ${filename}`);
-    await exec(`cqlsh -e "${command}"`).catch(fancy);
-    fancy(`finished db insert for ${filename}`);
+    return exec(`cqlsh -e "${command}"`).catch(fancy);
   }, stocksCount, (i) => (
     [`prices${i}.csv`, genPriceHistoryRows, 1, stockIds[i]]
   ));
