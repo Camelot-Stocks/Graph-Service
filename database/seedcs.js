@@ -11,7 +11,7 @@ const {
   genPriceHistoryRows,
 } = require('./seeddatagen');
 
-const copyCSV = async (filename, table, tableColsStr) => {
+const copyCSVintoDB = async (filename, table, tableColsStr) => {
   const csvFile = path.resolve(__dirname, 'seedFiles', filename);
   const command = `COPY stock_history.${table} (${tableColsStr})
     FROM '${csvFile}' WITH DELIMITER=',' AND HEADER=FALSE`;
@@ -29,24 +29,18 @@ const seed = async () => {
   await client.execute('TRUNCATE stock_history.users');
   fancy('truncated existing table data');
 
-  const stocksCount = 1;
+  const stocksCount = 20;
   const stocksFilename = 'stocks.csv';
   const stockIds = await genCSV(stocksFilename, genStockRow, stocksCount);
-  await copyCSV(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
+  await copyCSVintoDB(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
 
   await chainAsyncFuncCalls(async (filename, genBatch, batchCount, genBatchArgs) => {
     await genCSV(filename, genBatch, batchCount, genBatchArgs);
 
-    return copyCSV(filename, 'prices', 'symbol,ts,price');
+    return copyCSVintoDB(filename, 'prices', 'symbol,ts,price');
   }, stocksCount, (i) => (
     [`prices${i}.csv`, genPriceHistoryRows, 1, stockIds[i]]
-  ));
-
-  // for (let i = 0; i < stocksCount; i += 1) {
-  //   const stockId = stockIds[i];
-  //   // eslint-disable-next-line no-await-in-loop
-  //   await genCSV(`prices${i}.csv`, genPriceHistoryRows, 1, stockId);
-  // }
+  ), 10);
 
   await client.shutdown();
 };
