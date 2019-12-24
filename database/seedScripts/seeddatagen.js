@@ -6,7 +6,7 @@ const fancy = require('fancy-log');
 // const uuid = require('uuid/v4');
 
 const genCSV = async (filename, genData, batchCount, genDataArgs = []) => {
-  const csvFile = path.resolve(__dirname, 'seedFiles', filename);
+  const csvFile = path.resolve(__dirname, '..', 'seedFiles', filename);
   const encoding = 'utf-8';
   const writer = fs.createWriteStream(csvFile);
 

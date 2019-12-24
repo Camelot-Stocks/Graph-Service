@@ -14,7 +14,7 @@ const {
 const genPriceHistoryRowsAsync = require('./genPriceHistoryAsync');
 
 const copyCSVintoDB = async (filename, table, tableColsStr) => {
-  const csvFile = path.resolve(__dirname, 'seedFiles', filename);
+  const csvFile = path.resolve(__dirname, '..', 'seedFiles', filename);
   const command = `COPY stock_history.${table} (${tableColsStr})
     FROM '${csvFile}' WITH DELIMITER=',' AND HEADER=FALSE`;
 
