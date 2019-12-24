@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const fancy = require('fancy-log');
 const faker = require('faker');
-const { db, createDbTables, cleanDbTables } = require('./index');
+const { db, createDbTables, cleanDbTables } = require('../index');
 const {
   genStocks, genTags, genUsers, genUserStocks, genPriceHistory,
 } = require('./seeddatagen');

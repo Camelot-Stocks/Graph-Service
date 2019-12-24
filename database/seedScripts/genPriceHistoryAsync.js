@@ -4,8 +4,8 @@ const {
 const { genPriceHistoryRows } = require('./seeddatagen');
 
 if (isMainThread) {
-  module.exports = {
-    genPriceHistoryRowsAsync: (symbol) => new Promise((resolve, reject) => {
+  module.exports = function genPriceHistoryRowsAsync(symbol) {
+    return new Promise((resolve, reject) => {
       const worker = new Worker(__filename, {
         workerData: symbol,
       });
@@ -14,7 +14,7 @@ if (isMainThread) {
       worker.on('exit', (code) => {
         if (code !== 0) reject(new Error(`Worker stopped with exit code ${code}`));
       });
-    }),
+    });
   };
 } else {
   const symbol = workerData;

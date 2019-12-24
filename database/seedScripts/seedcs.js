@@ -3,7 +3,7 @@ const fancy = require('fancy-log');
 const path = require('path');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-const { clientOptions } = require('./authcs');
+const { clientOptions } = require('../authcs');
 const {
   chainAsyncFuncCalls,
   genCSV,
@@ -11,7 +11,7 @@ const {
   genTags,
   genStockTagRows,
 } = require('./seeddatagen');
-const { genPriceHistoryRowsAsync } = require('./spawnWorkers');
+const genPriceHistoryRowsAsync = require('./genPriceHistoryAsync');
 
 const copyCSVintoDB = async (filename, table, tableColsStr) => {
   const csvFile = path.resolve(__dirname, 'seedFiles', filename);
@@ -56,7 +56,7 @@ const seed = async () => {
   fancy('prices table seeded');
 
 
-  // seed users table
+  fancy('users table seeded');
 
   await client.shutdown();
 };
