@@ -8,15 +8,15 @@ const {
   chainAsyncFuncCalls,
   genCSV,
   genStockRow,
-  genPriceHistoryRows,
 } = require('./seeddatagen');
+const { genPriceHistoryRowsAsync } = require('./spawnWorkers');
 
 const copyCSVintoDB = async (filename, table, tableColsStr) => {
   const csvFile = path.resolve(__dirname, 'seedFiles', filename);
   const command = `COPY stock_history.${table} (${tableColsStr})
     FROM '${csvFile}' WITH DELIMITER=',' AND HEADER=FALSE`;
 
-  fancy(`starting db insert for ${filename}`);
+  fancy(`starting db write for ${filename}`);
   return exec(`cqlsh -e "${command}"`).catch(fancy);
 };
 
@@ -29,7 +29,7 @@ const seed = async () => {
   await client.execute('TRUNCATE stock_history.users');
   fancy('truncated existing table data');
 
-  const stocksCount = 20;
+  const stocksCount = 10;
   const stocksFilename = 'stocks.csv';
   const stockIds = await genCSV(stocksFilename, genStockRow, stocksCount);
   await copyCSVintoDB(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
@@ -39,8 +39,8 @@ const seed = async () => {
 
     return copyCSVintoDB(filename, 'prices', 'symbol,ts,price');
   }, stocksCount, (i) => (
-    [`prices${i}.csv`, genPriceHistoryRows, 1, stockIds[i]]
-  ), 10);
+    [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, stockIds[i]]
+  ), 5);
 
   await client.shutdown();
 };

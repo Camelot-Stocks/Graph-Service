@@ -3,39 +3,34 @@ const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
-const uuid = require('uuid/v4');
+// const uuid = require('uuid/v4');
 
-
-const genCSV = async (filename, genRow, rowCount, genRowArgs) => {
+const genCSV = async (filename, genData, rowCount, genDataArgs) => {
   const csvFile = path.resolve(__dirname, 'seedFiles', filename);
   const encoding = 'utf-8';
   const writer = fs.createWriteStream(csvFile);
 
-  const write = (rowCountTotal, rowCountLeft, cb, rowIds = []) => {
+  const write = async (batchCountTotal, batchCountLeft, cb, batchIds = []) => {
     let canWrite = true;
-    let i = rowCountLeft;
-    const rowBatchCount = 100000;
-    do {
-      const curRowBatchCount = Math.min(i, rowBatchCount);
-      i -= curRowBatchCount;
-      let writeStr = '';
-      for (let j = 0; j < curRowBatchCount; j += 1) {
-        const rowData = genRow(genRowArgs);
-        rowIds.push(rowData[0]);
-        writeStr += rowData[1];
-      }
+    let i = batchCountLeft;
+    fancy(`1/${batchCountTotal} batch datagen and write started for ${filename}`);
 
-      fancy(`${rowCountTotal - i}/${rowCountTotal} batches written for ${filename}`);
+    do {
+      i -= 1;
+      // eslint-disable-next-line no-await-in-loop
+      const dataPair = await genData(genDataArgs);
+      batchIds.push(dataPair[0]);
+      const writeStr = dataPair[1];
 
       if (i === 0) {
-        writer.write(writeStr, encoding, () => cb(rowIds));
+        writer.write(writeStr, encoding, () => cb(batchIds));
       } else {
         canWrite = writer.write(writeStr, encoding);
       }
     } while (i > 0 && canWrite);
 
     if (i > 0) {
-      writer.once('drain', () => write(rowCountTotal, i, cb, rowIds));
+      writer.once('drain', () => write(batchCountTotal, i, cb, batchIds));
     }
   };
 

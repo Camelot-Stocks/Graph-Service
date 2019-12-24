@@ -25,7 +25,7 @@ CREATE TABLE prices (
   ts TIMESTAMP,
   price DECIMAL,
   PRIMARY KEY (symbol, ts)
-);
+) WITH CLUSTERING ORDER BY (ts DESC);
 -- break out timestamp into subcomponents to cluster for faster querying?
 
 CREATE TABLE users (
