@@ -3,7 +3,7 @@ const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
-// const uuid = require('uuid/v4');
+const uuid = require('cassandra-driver').types.Uuid;
 
 const genCSV = async (filename, genData, batchCount, genDataArgs = []) => {
   const csvFile = path.resolve(__dirname, '..', 'seedFiles', filename);
@@ -109,6 +109,26 @@ const genStockTagRows = (symbols, tags) => {
   return [null, rowsStr];
 };
 
+const genUserRows = (symbols) => {
+  const userCount = 100000;
+  let rowsStr = '';
+  for (let i = 0; i < userCount; i += 1) {
+    const userId = uuid.random();
+    const firstname = faker.name.firstName().replace('\'', '');
+    const lastname = faker.name.lastName().replace('\'', '');
+    const balance = faker.random.number({ min: 0, max: 5000000, precision: 0.01 });
+    const stocksCount = faker.random.number(6);
+    const stocks = {};
+    for (let j = 0; j < stocksCount; j += 1) {
+      const stock = symbols[faker.random.number(symbols.length - 1)];
+      stocks[stock] = faker.random.number(1000);
+    }
+    const stocksStr = JSON.stringify(stocks).replace(/"/g, '\'');
+    rowsStr += `${userId}|'${firstname}'|'${lastname}'|${balance}|${stocksStr}\n`;
+  }
+  return [null, rowsStr];
+};
+
 const genStocks = (qty) => {
   const stocks = [];
   for (let i = 0; i < qty; i += 1) {
@@ -186,6 +206,7 @@ module.exports = {
   genStockRow,
   genPriceHistoryRows,
   genStockTagRows,
+  genUserRows,
   genStocks,
   genTags,
   genUsers,
