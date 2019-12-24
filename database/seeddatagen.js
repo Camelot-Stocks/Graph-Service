@@ -5,7 +5,7 @@ const path = require('path');
 const fancy = require('fancy-log');
 // const uuid = require('uuid/v4');
 
-const genCSV = async (filename, genData, rowCount, genDataArgs) => {
+const genCSV = async (filename, genData, batchCount, genDataArgs = []) => {
   const csvFile = path.resolve(__dirname, 'seedFiles', filename);
   const encoding = 'utf-8';
   const writer = fs.createWriteStream(csvFile);
@@ -13,17 +13,20 @@ const genCSV = async (filename, genData, rowCount, genDataArgs) => {
   const write = async (batchCountTotal, batchCountLeft, cb, batchIds = []) => {
     let canWrite = true;
     let i = batchCountLeft;
-    fancy(`1/${batchCountTotal} batch datagen and write started for ${filename}`);
+    fancy(`1/${batchCountTotal} batch data gen and write started for ${filename}`);
 
     do {
       i -= 1;
       // eslint-disable-next-line no-await-in-loop
-      const dataPair = await genData(genDataArgs);
+      const dataPair = await genData(...genDataArgs);
       batchIds.push(dataPair[0]);
       const writeStr = dataPair[1];
 
       if (i === 0) {
-        writer.write(writeStr, encoding, () => cb(batchIds));
+        writer.write(writeStr, encoding, () => {
+          fancy(`${batchCountTotal}/${batchCountTotal} batch data gen and write finished for ${filename}`);
+          cb(batchIds);
+        });
       } else {
         canWrite = writer.write(writeStr, encoding);
       }
@@ -34,7 +37,7 @@ const genCSV = async (filename, genData, rowCount, genDataArgs) => {
     }
   };
 
-  return new Promise((resolve) => write(rowCount, rowCount, resolve));
+  return new Promise((resolve) => write(batchCount, batchCount, resolve));
 };
 
 const chainAsyncFuncCalls = (asyncFunc, totalLinkCount, callsArgGenerator, chainCount = 5) => {
@@ -91,6 +94,18 @@ const genPriceHistoryRows = (symbol) => {
       trend = faker.random.number({ min: -1, max: 1, precision: 0.01 });
     }
   }
+  return [null, rowsStr];
+};
+
+const genStockTagRows = (symbols, tags) => {
+  const stockTagsCount = 500;
+  let rowsStr = '';
+  for (let i = 0; i < stockTagsCount; i += 1) {
+    const tag = tags[faker.random.number(tags.length - 1)];
+    const symbol = symbols[faker.random.number(symbols.length - 1)];
+    rowsStr += `'${symbol}','${tag}'\n`;
+  }
+
   return [null, rowsStr];
 };
 
@@ -170,6 +185,7 @@ module.exports = {
   chainAsyncFuncCalls,
   genStockRow,
   genPriceHistoryRows,
+  genStockTagRows,
   genStocks,
   genTags,
   genUsers,
