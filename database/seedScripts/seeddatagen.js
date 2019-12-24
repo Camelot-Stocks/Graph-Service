@@ -70,9 +70,9 @@ const chainAsyncFuncCalls = (asyncFunc, totalLinkCount, callsArgGenerator, chain
 const genStockRow = () => {
   const symbol = faker.random.alphaNumeric(5).toUpperCase();
   const name = faker.company.companyName().replace(/'|,/g, '');
-  const owners = faker.random.number(20000);
   const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
-  return [symbol, `${symbol},${name},${owners},${analystHold}\n`];
+  const owners = faker.random.number(20000);
+  return [symbol, `${symbol},${name},${analystHold},${owners}\n`];
 };
 
 const genPriceHistoryRows = (symbol) => {
@@ -98,7 +98,7 @@ const genPriceHistoryRows = (symbol) => {
 };
 
 const genStockTagRows = (symbols, tags) => {
-  const stockTagsCount = 500;
+  const stockTagsCount = symbols.length * 3;
   let rowsStr = '';
   for (let i = 0; i < stockTagsCount; i += 1) {
     const tag = tags[faker.random.number(tags.length - 1)];

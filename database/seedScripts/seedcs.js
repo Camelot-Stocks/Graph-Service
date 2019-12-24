@@ -33,22 +33,22 @@ const seed = async () => {
   fancy('truncated existing table data');
 
 
-  const stocksCount = 10;
+  const stocksCount = 1;
   const stocksFilename = 'stocks.csv';
-  const symbols = await genCSV(stocksFilename, genStockRow, stocksCount);
+  const stockSymbols = await genCSV(stocksFilename, genStockRow, stocksCount);
   await copyCSVintoDB(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
   fancy('stocks table seeded');
 
 
   const tags = genTags();
   const stockTagsFilename = 'stock_tags.csv';
-  await genCSV(stockTagsFilename, genStockTagRows, 1, [symbols, tags]);
+  await genCSV(stockTagsFilename, genStockTagRows, 1, [stockSymbols, tags]);
   await copyCSVintoDB(stockTagsFilename, 'stock_tags', 'symbol,tag');
   fancy('stock_tags table seeded');
 
 
   const usersFilename = 'users.csv';
-  await genCSV(usersFilename, genUserRows, 1, [symbols]);
+  await genCSV(usersFilename, genUserRows, 1, [stockSymbols]);
   await copyCSVintoDB(usersFilename, 'users', 'user_id,firstname,lastname,balance,stocks', '|');
   fancy('users table seeded');
 
@@ -58,7 +58,7 @@ const seed = async () => {
 
     return copyCSVintoDB(filename, 'prices', 'symbol,ts,price');
   }, stocksCount, (i) => (
-    [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, symbols[i]]
+    [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, [stockSymbols[i]]]
   ), 5);
   fancy('prices table seeded');
 
