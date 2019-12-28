@@ -53,12 +53,19 @@ const seed = async () => {
   fancy('users table seeded');
 
 
-  await chainAsyncFuncCalls(async (filename, genBatch, batchCount, genBatchArgs) => {
-    await genCSV(filename, genBatch, batchCount, genBatchArgs);
+  // await chainAsyncFuncCalls(async (filename, genBatch, batchCount, genBatchArgs) => {
+  //   await genCSV(filename, genBatch, batchCount, genBatchArgs);
 
-    return copyCSVintoDB(filename, 'prices', 'symbol,ts,price,filter10min,filter1hr,filter1day,filter7day');
-  }, stocksCount, (i) => (
+  //   return copyCSVintoDB(filename, 'prices',
+  //     'symbol,ts,price,filter10min,filter1hr,filter1day,filter7day');
+  // }, stocksCount, (i) => (
+  //   [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, [stockSymbols[i]]]
+  // ), 5);
+  await chainAsyncFuncCalls(genCSV, stocksCount, (i) => (
     [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, [stockSymbols[i]]]
+  ), 5);
+  await chainAsyncFuncCalls(copyCSVintoDB, stocksCount, (i) => (
+    [`prices${i}.csv`, 'prices', 'symbol,ts,price,filter10min,filter1hr,filter1day,filter7day']
   ), 5);
   fancy('prices table seeded');
 
