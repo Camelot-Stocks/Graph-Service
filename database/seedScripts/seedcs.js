@@ -20,7 +20,7 @@ const copyCSVintoDB = async (filename, table, tableColsStr, delimiter = ',') => 
     FROM '${csvFile}' WITH DELIMITER='${delimiter}' AND HEADER=FALSE`;
 
   fancy(`starting db write for ${filename}`);
-  return exec(`cqlsh -e "${command}"`).catch(fancy);
+  return exec(`cqlsh --debug -e "${command}"`).catch(fancy);
 };
 
 const seed = async () => {
@@ -33,7 +33,7 @@ const seed = async () => {
   fancy('truncated existing table data');
 
 
-  const stocksCount = 1;
+  const stocksCount = 200;
   const stocksFilename = 'stocks.csv';
   const stockSymbols = await genCSV(stocksFilename, genStockRow, stocksCount);
   await copyCSVintoDB(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
@@ -53,20 +53,12 @@ const seed = async () => {
   fancy('users table seeded');
 
 
-  // await chainAsyncFuncCalls(async (filename, genBatch, batchCount, genBatchArgs) => {
-  //   await genCSV(filename, genBatch, batchCount, genBatchArgs);
-
-  //   return copyCSVintoDB(filename, 'prices',
-  //     'symbol,ts,price,filter10min,filter1hr,filter1day,filter7day');
-  // }, stocksCount, (i) => (
-  //   [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, [stockSymbols[i]]]
-  // ), 5);
   await chainAsyncFuncCalls(genCSV, stocksCount, (i) => (
     [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, [stockSymbols[i]]]
   ), 5);
   await chainAsyncFuncCalls(copyCSVintoDB, stocksCount, (i) => (
     [`prices${i}.csv`, 'prices', 'symbol,ts,price,filter10min,filter1hr,filter1day,filter7day']
-  ), 5);
+  ), 1);
   fancy('prices table seeded');
 
 
