@@ -87,7 +87,12 @@ const genPriceHistoryRows = (symbol) => {
     const ts = time.format('YYYY-MM-DD HH:mm:ssZZ');
     price = Math.max(Math.round(100 * (price + trend
       * faker.random.number({ min: 0, max: 1, precision: 0.01 }))) / 100, 0.05);
-    rowsStr += `${symbol},${ts},${price}\n`;
+    const minute = time.minute();
+    const filter10min = minute % 10 === 0;
+    const filter1hr = minute === 0;
+    const filter1day = filter1hr && time.hour() === 17;
+    const filter7day = filter1day && time.day() === 1;
+    rowsStr += `${symbol},${ts},${price},${filter10min},${filter1hr},${filter1day},${filter7day}\n`;
 
     time.add(5, 'minutes');
     if (faker.random.number(100) > 97) {

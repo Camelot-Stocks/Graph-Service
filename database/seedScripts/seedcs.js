@@ -33,7 +33,7 @@ const seed = async () => {
   fancy('truncated existing table data');
 
 
-  const stocksCount = 200;
+  const stocksCount = 1;
   const stocksFilename = 'stocks.csv';
   const stockSymbols = await genCSV(stocksFilename, genStockRow, stocksCount);
   await copyCSVintoDB(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
@@ -56,7 +56,7 @@ const seed = async () => {
   await chainAsyncFuncCalls(async (filename, genBatch, batchCount, genBatchArgs) => {
     await genCSV(filename, genBatch, batchCount, genBatchArgs);
 
-    return copyCSVintoDB(filename, 'prices', 'symbol,ts,price');
+    return copyCSVintoDB(filename, 'prices', 'symbol,ts,price,filter10min,filter1hr,filter1day,filter7day');
   }, stocksCount, (i) => (
     [`prices${i}.csv`, genPriceHistoryRowsAsync, 1, [stockSymbols[i]]]
   ), 5);

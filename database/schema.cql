@@ -24,9 +24,16 @@ CREATE TABLE prices (
   symbol VARCHAR,
   ts TIMESTAMP,
   price DECIMAL,
+  filter10min BOOLEAN,
+  filter1hr BOOLEAN,
+  filter1day BOOLEAN,
+  filter7day BOOLEAN,
   PRIMARY KEY (symbol, ts)
 ) WITH CLUSTERING ORDER BY (ts DESC);
--- break out timestamp into subcomponents to cluster for faster querying?
+CREATE INDEX ON stock_history.prices (filter7day);
+CREATE INDEX ON stock_history.prices (filter1day);
+CREATE INDEX ON stock_history.prices (filter1hr);
+CREATE INDEX ON stock_history.prices (filter10min);
 
 CREATE TABLE users (
   user_id UUID,
