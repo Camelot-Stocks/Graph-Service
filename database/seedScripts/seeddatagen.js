@@ -108,7 +108,7 @@ const genStockTagRows = (symbols, tags) => {
   for (let i = 0; i < stockTagsCount; i += 1) {
     const tag = tags[faker.random.number(tags.length - 1)];
     const symbol = symbols[faker.random.number(symbols.length - 1)];
-    rowsStr += `'${symbol}','${tag}'\n`;
+    rowsStr += `${symbol},${tag}\n`;
   }
 
   return [null, rowsStr];
@@ -129,7 +129,7 @@ const genUserRows = (symbols) => {
       stocks[stock] = faker.random.number(1000);
     }
     const stocksStr = JSON.stringify(stocks).replace(/"/g, '\'');
-    rowsStr += `${userId}|'${firstname}'|'${lastname}'|${balance}|${stocksStr}\n`;
+    rowsStr += `${userId}|${firstname}|${lastname}|${balance}|${stocksStr}\n`;
   }
   return [null, rowsStr];
 };
