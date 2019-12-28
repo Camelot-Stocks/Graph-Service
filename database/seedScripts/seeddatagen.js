@@ -85,8 +85,8 @@ const genPriceHistoryRows = (symbol) => {
   for (let i = 0; i < priceCount; i += 1) {
     // const ts = time.format('YYYY-MM-DD HH:mm:ssZZ').substring(0, 22);
     const ts = time.format('YYYY-MM-DD HH:mm:ssZZ');
-    price = Math.max(Math.round(100 * price + trend
-      * faker.random.number({ min: 0, max: 1, precision: 0.01 })) / 100, 0.05);
+    price = Math.max(Math.round(100 * (price + trend
+      * faker.random.number({ min: 0, max: 1, precision: 0.01 }))) / 100, 0.05);
     rowsStr += `${symbol},${ts},${price}\n`;
 
     time.add(5, 'minutes');

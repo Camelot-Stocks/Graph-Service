@@ -33,7 +33,7 @@ const seed = async () => {
   fancy('truncated existing table data');
 
 
-  const stocksCount = 1;
+  const stocksCount = 200;
   const stocksFilename = 'stocks.csv';
   const stockSymbols = await genCSV(stocksFilename, genStockRow, stocksCount);
   await copyCSVintoDB(stocksFilename, 'stocks', 'symbol,stock_name,analyst_hold,owners');
