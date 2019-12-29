@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS prices (
   -- break out timestamp into subcomponents for faster querying?
   price NUMERIC(10,2)
 );
+CREATE INDEX ON prices (stock_symbol);
 
 CREATE TABLE IF NOT EXISTS users (
   user_id SERIAL PRIMARY KEY,
