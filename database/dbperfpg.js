@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const fancy = require('fancy-log');
 const { db } = require('./index');
 
@@ -208,77 +209,34 @@ const benchmarkDB = async (dbConn) => {
     'EEWKA',
     'NAAC9',
   ];
-  const stock = stocks[Math.floor(Math.random() * 200)];
 
-  try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-12-30';`;
-    let start = process.hrtime();
-    await conn.query(query);
-    let end = process.hrtime(start);
-    fancy.info(`1D query time first exec: ${end[1] / 1000000}ms`);
-    start = process.hrtime();
-    await conn.query(query);
-    end = process.hrtime(start);
-    fancy.info(`1D query time next exec: ${end[1] / 1000000}ms`);
-  } catch (error) {
-    fancy.error(error);
+  const queriesData = [
+    ['1D', " AND ts > '2019-12-30'"],
+    ['1W', " AND ts > '2019-12-24' AND extract_min(ts) IN (0, 10, 20, 30, 40, 50)"],
+    ['1M', " AND ts > '2019-11-30' AND extract_min(ts) = 0"],
+    ['1Y', " AND ts > '2018-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17"],
+    ['5Y', " AND ts > '2014-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17 AND extract_dow(ts) = 1"],
+  ];
+
+  for (let i = 0; i < queriesData.length; i += 1) {
+    const queryData = queriesData[i];
+    const stock = stocks[Math.floor(Math.random() * 200)];
+
+    try {
+      const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}'${queryData[1]};`;
+      let start = process.hrtime();
+      await conn.query(query);
+      let end = process.hrtime(start);
+      fancy.info(`${queryData[0]} query time first exec: ${end[1] / 1000000}ms`);
+      start = process.hrtime();
+      await conn.query(query);
+      end = process.hrtime(start);
+      fancy.info(`${queryData[0]} query time next exec: ${end[1] / 1000000}ms`);
+    } catch (error) {
+      fancy.error(error);
+    }
   }
 
-  try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-12-24' AND extract_min(ts) IN (0, 10, 20, 30, 40, 50)`;
-    let start = process.hrtime();
-    await conn.query(query);
-    let end = process.hrtime(start);
-    fancy.info(`1W query time first exec: ${end[1] / 1000000}ms`);
-    start = process.hrtime();
-    await conn.query(query);
-    end = process.hrtime(start);
-    fancy.info(`1W query time next exec: ${end[1] / 1000000}ms`);
-  } catch (error) {
-    fancy.error(error);
-  }
-
-  try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-11-30' AND extract_min(ts) = 0;`;
-    let start = process.hrtime();
-    await conn.query(query);
-    let end = process.hrtime(start);
-    fancy.info(`1M query time first exec: ${end[1] / 1000000}ms`);
-    start = process.hrtime();
-    await conn.query(query);
-    end = process.hrtime(start);
-    fancy.info(`1M query time next exec: ${end[1] / 1000000}ms`);
-  } catch (error) {
-    fancy.error(error);
-  }
-
-  try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2018-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17;`;
-    let start = process.hrtime();
-    await conn.query(query);
-    let end = process.hrtime(start);
-    fancy.info(`1Y query time first exec: ${end[1] / 1000000}ms`);
-    start = process.hrtime();
-    await conn.query(query);
-    end = process.hrtime(start);
-    fancy.info(`1Y query time next exec: ${end[1] / 1000000}ms`);
-  } catch (error) {
-    fancy.error(error);
-  }
-
-  try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2014-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17 AND extract_dow(ts) = 1;`;
-    let start = process.hrtime();
-    await conn.query(query);
-    let end = process.hrtime(start);
-    fancy.info(`5Y query time first exec: ${end[1] / 1000000}ms`);
-    start = process.hrtime();
-    await conn.query(query);
-    end = process.hrtime(start);
-    fancy.info(`5Y query time next exec: ${end[1] / 1000000}ms`);
-  } catch (error) {
-    fancy.error(error);
-  }
 
   fancy.info('...tests complete');
   conn.end();
