@@ -214,6 +214,7 @@ const benchmarkDB = async (dbConn) => {
     ['1D', " AND ts > '2019-12-30'"],
     ['1W', " AND ts > '2019-12-24' AND extract_min(ts) IN (0, 10, 20, 30, 40, 50)"],
     ['1M', " AND ts > '2019-11-30' AND extract_min(ts) = 0"],
+    ['3M', " AND ts > '2019-09-30' AND extract_min(ts) = 0"],
     ['1Y', " AND ts > '2018-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17"],
     ['5Y', " AND ts > '2014-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17 AND extract_dow(ts) = 1"],
   ];
@@ -226,12 +227,17 @@ const benchmarkDB = async (dbConn) => {
       const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}'${queryData[1]};`;
       let start = process.hrtime();
       await conn.query(query);
-      let end = process.hrtime(start);
+      const end = process.hrtime(start);
       fancy.info(`${queryData[0]} query time first exec: ${end[1] / 1000000}ms`);
-      start = process.hrtime();
-      await conn.query(query);
-      end = process.hrtime(start);
-      fancy.info(`${queryData[0]} query time next exec: ${end[1] / 1000000}ms`);
+
+      let sum = 0;
+      const runs = 3;
+      for (let j = 0; j < runs; j += 1) {
+        start = process.hrtime();
+        await conn.query(query);
+        sum += process.hrtime(start)[1];
+      }
+      fancy.info(`${queryData[0]} query time next ${runs} avg: ${((sum / runs) / 1000000).toFixed(6)}ms`);
     } catch (error) {
       fancy.error(error);
     }
