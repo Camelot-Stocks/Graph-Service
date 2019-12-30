@@ -12,6 +12,8 @@
     "seedpg:test": "node --inspect-brk database/seedScripts/seedpg.js",
     "seedcs": "node database/seedScripts/seedcs.js",
     "seedcs:test": "node --inspect-brk database/seedScripts/seedcs.js",
+    "dbperf": "node database/dbperfpg.js",
+    "dbperf:test": "node --inspect-brk database/dbperfpg.js",
     "test": "jest --coverage --colors",
     "test:watch": "jest --watch --coverage",
     "lint": "eslint --ext .js,.jsx ."
