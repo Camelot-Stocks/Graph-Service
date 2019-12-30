@@ -211,7 +211,7 @@ const benchmarkDB = async (dbConn) => {
   const stock = stocks[Math.floor(Math.random() * 200)];
 
   try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-12-28';`;
+    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-12-30';`;
     let start = process.hrtime();
     await conn.query(query);
     let end = process.hrtime(start);
@@ -225,7 +225,7 @@ const benchmarkDB = async (dbConn) => {
   }
 
   try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-12-22' AND extract_min(ts) IN (0, 10, 20, 30, 40, 50)`;
+    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-12-24' AND extract_min(ts) IN (0, 10, 20, 30, 40, 50)`;
     let start = process.hrtime();
     await conn.query(query);
     let end = process.hrtime(start);
@@ -239,7 +239,7 @@ const benchmarkDB = async (dbConn) => {
   }
 
   try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-11-29' AND extract_min(ts) = 0;`;
+    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2019-11-30' AND extract_min(ts) = 0;`;
     let start = process.hrtime();
     await conn.query(query);
     let end = process.hrtime(start);
@@ -253,7 +253,7 @@ const benchmarkDB = async (dbConn) => {
   }
 
   try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2018-12-29' AND extract_min(ts) = 0 AND extract_hour(ts) = 17;`;
+    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2018-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17;`;
     let start = process.hrtime();
     await conn.query(query);
     let end = process.hrtime(start);
@@ -267,7 +267,7 @@ const benchmarkDB = async (dbConn) => {
   }
 
   try {
-    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2014-12-29' AND extract_min(ts) = 0 AND extract_hour(ts) = 17 AND extract_dow(ts) = 1;`;
+    const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}' AND ts > '2014-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17 AND extract_dow(ts) = 1;`;
     let start = process.hrtime();
     await conn.query(query);
     let end = process.hrtime(start);
