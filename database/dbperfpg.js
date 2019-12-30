@@ -226,9 +226,9 @@ const benchmarkDB = async (dbConn) => {
     try {
       const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}'${queryData[1]};`;
       let start = process.hrtime();
-      await conn.query(query);
+      const res = await conn.query(query);
       const end = process.hrtime(start);
-      fancy.info(`${queryData[0]} query time first exec: ${end[1] / 1000000}ms`);
+      fancy.info(`${queryData[0]} query time first exec: ${end[1] / 1000000}ms`, `${res.rows.length} rows returned`);
 
       let sum = 0;
       const runs = 3;
