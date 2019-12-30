@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
-const db = require('../database/index.js');
+const controller = require('./controller');
 
 const app = express();
 
@@ -9,10 +9,10 @@ app.use(cors());
 app.use('/', express.static(path.resolve(__dirname, '../public')));
 
 app.get('/api/graph/stockHistory', async (req, res) => {
-  const { id } = req.query;
+  const { symbol, term } = req.query;
 
   try {
-    const stocks = await db.find(id);
+    const stocks = await controller.getStockHistory(symbol, term);
     res.json(stocks);
   } catch (error) {
     res.status(500).end('server cannot retrieve stocks');
