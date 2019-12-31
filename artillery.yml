@@ -1,5 +1,8 @@
 config:
   target: 'http://localhost:3000'
+  ensure:
+    p99: 2000
+    maxErrorRate: 1
   phases:
     - duration: 10
       arrivalRate: 20
@@ -7,14 +10,41 @@ config:
       arrivalRate: 100
   # environments:
   #   production:
-  # payload:
-  #   path: "database/seedfiles/stocks.csv"
-  #   fields:
-  #     - "stock_symbol"
+  variables:
+    term:
+      - "1W"
+      - "1M"
+      - "3M"
+      - "1Y"
+      - "5Y"
+  payload:
+    path: "database/seedfiles/stocks.csv"
+    fields:
+      - "stock_symbol"
 scenarios:
   - name: "Check stock first page"
+    weight: 4
     flow:
     - get:
-        url: "/api/graph/stockHistory?id=PN93O&term=1D"
-    # - think: 5
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
+  - name: "Check stock multiple pages"
+    weight: 1
+    flow:
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
+    - think: 2
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term={{ term }}"
+    - think: 2
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term={{ term }}"
+  - name: "Check stock 1D and 5Y"
+    weight: 1
+    flow:
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
+    - think: 2
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=5Y"
+    
 
