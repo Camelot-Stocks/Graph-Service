@@ -1,3 +1,4 @@
+require('newrelic');
 const fancy = require('fancy-log');
 const app = require('./app');
 
