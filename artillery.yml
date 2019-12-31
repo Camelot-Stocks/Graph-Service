@@ -1,0 +1,20 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 10
+      arrivalRate: 20
+    - duration: 60
+      arrivalRate: 100
+  # environments:
+  #   production:
+  # payload:
+  #   path: "database/seedfiles/stocks.csv"
+  #   fields:
+  #     - "stock_symbol"
+scenarios:
+  - name: "Check stock first page"
+    flow:
+    - get:
+        url: "/api/graph/stockHistory?id=PN93O&term=1D"
+    # - think: 5
+
