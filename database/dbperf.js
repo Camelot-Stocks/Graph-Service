@@ -23,7 +23,7 @@ const benchmarkDB = async (dbConn) => {
     const stock = stocks[Math.floor(Math.random() * 200)];
 
     try {
-      const query = `SELECT ts,price FROM prices WHERE stock_symbol='${stock}'${queryData[1]};`;
+      const query = `SELECT price FROM prices WHERE stock_symbol='${stock}'${queryData[1]};`;
       let start = process.hrtime();
       const res = await conn.query(query);
       const end = process.hrtime(start);
