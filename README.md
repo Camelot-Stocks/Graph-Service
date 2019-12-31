@@ -52,7 +52,6 @@ TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
 {
   tags: ["Top 100", "Technology", "Banking"],
   historicPrice1D: [166.09, …],
-  stockId: 8,
   name: "American Express Co",
   symbol: "AXP",
   analystHold: 0,

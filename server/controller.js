@@ -16,13 +16,26 @@ const getStockHistory = async (symbol, term) => {
   };
   const queryPrices = `SELECT price FROM prices WHERE stock_symbol='${symbol}'${priceQueryData[term]};`;
   queries.push(pool.query(queryPrices));
-  // get tag data
-  // get stock data
 
-  const [priceHistoryRes] = await Promise.all(queries);
-  const stockHistory = {};
-  stockHistory[`historicPrice${term}`] = priceHistoryRes.rows.map((row) => row.price);
-  debugger;
+  const queryTags = `SELECT tag_name FROM tags t JOIN stock_tags s ON t.tag_id=s.tag_id WHERE stock_symbol='${symbol}';`;
+  queries.push(pool.query(queryTags));
+
+  const queryStocks = `SELECT stock_name,owners,analyst_hold FROM stocks WHERE stock_symbol='${symbol}';`;
+  queries.push(pool.query(queryStocks));
+
+  const [priceHistoryRes, tagRes, stockRes] = await Promise.all(queries);
+  // eslint-disable-next-line camelcase
+  const { owners, analyst_hold, stock_name } = stockRes.rows[0];
+
+  const stockHistory = {
+    [`historicPrice${term}`]: priceHistoryRes.rows.map((row) => row.price),
+    tags: tagRes.rows.map((row) => row.tag_name),
+    symbol,
+    owners,
+    analystHold: analyst_hold,
+    name: stock_name,
+  };
+
   return stockHistory;
 };
 
