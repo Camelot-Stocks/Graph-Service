@@ -53,7 +53,7 @@ TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
   tags: ["Top 100", "Technology", "Banking"],
   historicPrice1D: [166.09, …],
   name: "American Express Co",
-  symbol: "AXP",
+  symbol: "AMEX",
   analystHold: 0,
   robinhoodOwners: 28513,
   price: 166.09,
@@ -68,18 +68,18 @@ TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
 #### Body Format (JSON):
 ```javascript
 {
-  [
+  prices: [
     {
       timestamp: '1999-01-08 04:05:00 -8:00',
-      stockId: 8,
+      symbol: 'MSFT',
       price: 166.09,
     },
     {
       timestamp: '1999-01-08 04:10:00 -8:00',
-      stockId: 8,
+      symbol: 'MSFT',
       price: 167.19,
     },
-  ]
+  ],
 }
 ```
 timestamp will be rounded to nearest 5 minutes
@@ -88,10 +88,7 @@ timestamp will be rounded to nearest 5 minutes
 created priceIds
 ```javascript
 {
-  [
-    2348234,
-    1324358,
-  ]
+  createdCount: 2,
 }
 ```
 
@@ -105,12 +102,12 @@ created priceIds
   [
     {
       timestamp: '1999-01-08 04:05:00 -8:00',
-      stockId: 8,
+      symbol: 'MSFT',
       price: 166.09,
     },
     {
       timestamp: '1999-01-08 04:10:00 -8:00',
-      stockId: 8,
+      symbol: 'MSFT',
       price: 167.19,
     },
   ]
@@ -122,10 +119,7 @@ timestamp will be rounded to nearest 5 minutes
 updated priceIds
 ```javascript
 {
-  [
-    2348234,
-    1324358,
-  ]
+  updatedCount: 2,
 }
 ```
 
@@ -139,12 +133,12 @@ updated priceIds
   {
     startTimestamp: '1999-01-08 04:05:00 -8:00',
     endTimestamp: '1999-01-09 04:05:00 -8:00',
-    stockId: 8,
+    symbol: 'MSFT',
   },
   {
     startTimestamp: '1999-01-08 04:05:00 -8:00',
     endTimestamp: '1999-01-09 04:05:00 -8:00',
-    stockId: 9,
+    symbol: 'MSFT',
   },
 }
 ```
@@ -154,9 +148,6 @@ timestamp will be rounded to nearest 5 minutes
 deleted priceIds
 ```javascript
 {
-  [
-    2348234,
-    1324358,
-  ]
+  deletedCount: 2,
 }
 ```

@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const fancy = require('fancy-log');
+const bodyParser = require('body-parser');
 const controller = require('./controller');
 
 const app = express();
@@ -20,9 +21,22 @@ app.get('/api/graph/stockHistory', async (req, res) => {
   }
 });
 
-// eslint-disable-next-line no-unused-vars
+app.use(bodyParser.json({ extended: true }));
 app.post('/api/graph/stockHistory', async (req, res) => {
-  // TODO
+  const { prices } = req.body;
+  // TODO - does checking length expose to attack?
+  // if (prices.length > 500000) {
+  //   res.status(400).end('request rejected, too many records');
+  //   return;
+  // }
+
+  try {
+    const count = await controller.addStockHistory(prices);
+    res.json({ count });
+  } catch (e) {
+    fancy(e);
+    res.status(500).end('server failed to add stock history');
+  }
 });
 
 // eslint-disable-next-line no-unused-vars

@@ -3,6 +3,7 @@ const { db } = require('../database/index.js');
 
 const getStockHistory = async (symbol, term) => {
   // TODO - can these three combined queries be moved to a pg function for one server query?
+  // TODO - prepare queries?
   const pool = await db;
   const queries = [];
 
@@ -14,14 +15,25 @@ const getStockHistory = async (symbol, term) => {
     '1Y': " AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2018-12-31'",
     '5Y': " AND extract_dow(ts) = 1 AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2014-12-31'",
   };
-  const queryPrices = `SELECT price FROM prices WHERE stock_symbol='${symbol}'${priceQueryData[term]};`;
-  queries.push(pool.query(queryPrices));
+  // TODO - vulnerable to injection attack through term?
+  const queryPrices = `SELECT price FROM prices WHERE stock_symbol=$1${priceQueryData[term]};`;
+  queries.push(pool.query({
+    text: queryPrices,
+    values: [symbol],
+    // rowMode: 'array',
+  }));
 
-  const queryTags = `SELECT tag_name FROM tags t JOIN stock_tags s ON t.tag_id=s.tag_id WHERE stock_symbol='${symbol}';`;
-  queries.push(pool.query(queryTags));
+  const queryTags = 'SELECT tag_name FROM tags t JOIN stock_tags s ON t.tag_id=s.tag_id WHERE stock_symbol=$1;';
+  queries.push(pool.query({
+    text: queryTags,
+    values: [symbol],
+  }));
 
-  const queryStocks = `SELECT stock_name,owners,analyst_hold FROM stocks WHERE stock_symbol='${symbol}';`;
-  queries.push(pool.query(queryStocks));
+  const queryStocks = 'SELECT stock_name,owners,analyst_hold FROM stocks WHERE stock_symbol=$1;';
+  queries.push(pool.query({
+    text: queryStocks,
+    values: [symbol],
+  }));
 
   const [priceHistoryRes, tagRes, stockRes] = await Promise.all(queries);
   // eslint-disable-next-line camelcase
@@ -29,6 +41,7 @@ const getStockHistory = async (symbol, term) => {
 
   const stockHistory = {
     [`historicPrice${term}`]: priceHistoryRes.rows.map((row) => row.price),
+    // [`historicPrice${term}`]: priceHistoryRes.rows[0],
     tags: tagRes.rows.map((row) => row.tag_name),
     symbol,
     owners,
@@ -39,6 +52,21 @@ const getStockHistory = async (symbol, term) => {
   return stockHistory;
 };
 
+const addStockHistory = async (prices) => {
+  // TODO - prepare query
+  const pool = await db;
+  const queries = [];
+
+  for (let i = 0; i < prices.length; i += 1) {
+    const query = ``
+
+  }
+
+  await Promise.all(queries);
+  return queries.length;
+};
+
 module.exports = {
   getStockHistory,
+  addStockHistory,
 };

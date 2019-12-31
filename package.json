@@ -20,6 +20,7 @@
   "author": "Aston Khor <khoraston@gmail.com> (NA)",
   "license": "Aston",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cassandra-driver": "^4.3.1",
     "cors": "^2.8.5",
     "css-loader": "^3.2.1",
