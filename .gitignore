@@ -3,3 +3,4 @@ coverage
 Public/main.js
 database/seedFiles
 newrelic.js
+newrelic_agent.log
