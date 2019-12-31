@@ -7,6 +7,8 @@ const controller = require('./controller');
 
 const app = express();
 
+// TODO - add compression?
+
 app.use(cors());
 app.use('/', express.static(path.resolve(__dirname, '../public')));
 
@@ -25,10 +27,10 @@ app.use(bodyParser.json({ extended: true }));
 app.post('/api/graph/stockHistory', async (req, res) => {
   const { prices } = req.body;
   // TODO - does checking length expose to attack?
-  // if (prices.length > 500000) {
-  //   res.status(400).end('request rejected, too many records');
-  //   return;
-  // }
+  if (prices.length > 500000) {
+    res.status(400).end('request rejected, too many records');
+    return;
+  }
 
   try {
     const count = await controller.addStockHistory(prices);

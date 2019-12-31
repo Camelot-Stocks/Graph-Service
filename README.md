@@ -68,18 +68,18 @@ TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
 #### Body Format (JSON):
 ```javascript
 {
-  prices: [
+  "prices": [
     {
-      timestamp: '1999-01-08 04:05:00 -8:00',
-      symbol: 'MSFT',
-      price: 166.09,
+      "timestamp": "1999-01-08 04:05:00 -8:00",
+      "symbol": "MSFT",
+      "price": 166.09
     },
     {
-      timestamp: '1999-01-08 04:10:00 -8:00',
-      symbol: 'MSFT',
-      price: 167.19,
-    },
-  ],
+      "timestamp": "1999-01-08 04:10:00 -8:00",
+      "symbol": "MSFT",
+      "price": 167.19
+    }
+  ]
 }
 ```
 timestamp will be rounded to nearest 5 minutes

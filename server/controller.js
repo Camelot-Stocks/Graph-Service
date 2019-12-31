@@ -20,7 +20,6 @@ const getStockHistory = async (symbol, term) => {
   queries.push(pool.query({
     text: queryPrices,
     values: [symbol],
-    // rowMode: 'array',
   }));
 
   const queryTags = 'SELECT tag_name FROM tags t JOIN stock_tags s ON t.tag_id=s.tag_id WHERE stock_symbol=$1;';
@@ -40,8 +39,8 @@ const getStockHistory = async (symbol, term) => {
   const { owners, analyst_hold, stock_name } = stockRes.rows[0];
 
   const stockHistory = {
+    // TODO - vulnerable to injection attack through term?
     [`historicPrice${term}`]: priceHistoryRes.rows.map((row) => row.price),
-    // [`historicPrice${term}`]: priceHistoryRes.rows[0],
     tags: tagRes.rows.map((row) => row.tag_name),
     symbol,
     owners,
@@ -58,8 +57,12 @@ const addStockHistory = async (prices) => {
   const queries = [];
 
   for (let i = 0; i < prices.length; i += 1) {
-    const query = ``
-
+    const text = 'INSERT INTO prices(stock_symbol, ts, price) VALUES($1, $2, $3)';
+    const { symbol, timestamp, price } = prices[i];
+    queries.push(pool.query({
+      text,
+      values: [symbol, timestamp, price],
+    }));
   }
 
   await Promise.all(queries);
