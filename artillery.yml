@@ -1,38 +1,39 @@
 config:
   target: 'http://localhost:3000'
+  http:
+    pool: 10 # All HTTP requests from all virtual users will be sent over the same connection set through load balancer
   ensure:
     p95: 2000
     maxErrorRate: 1
   phases:
-    - duration: 30
-      arrivalRate: 10
-      rampTo: 100
-      name: "warm up"
+    - duration: 60
+      arrivalRate: 50
+      rampTo: 260
+      name: "ramp to peak"
     - duration: 180
-      arrivalRate: 100
-      rampTo: 500
-      name: "stress test"
+      arrivalRate: 260
+      name: "peak load"
   # environments:
   #   production:
-  variables:
-    term:
-      - "1W"
-      - "1M"
-      - "3M"
-      - "1Y"
-      - "5Y"
   payload:
     path: "database/seedfiles/stocks.csv"
     fields:
       - "stock_symbol"
 scenarios:
-  - name: "Check stock first page"
+  - name: "Add stock price"
     weight: 1
+    flow:
+    - post:
+        url: "/api/graph/stockHistory"
+        json:
+          prices: [{"timestamp": "1999-01-08 04:05:00 -8:00","symbol": "PN93O","price": 166.09},{"timestamp": "1999-01-08 04:10:00 -8:00","symbol": "PN93O","price": 167.19}]
+  - name: "Check stock 1D view"
+    weight: 100
     flow:
     - get:
         url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
-  - name: "Check stock multiple pages"
-    weight: 1
+  - name: "Check stock all views"
+    weight: 100
     flow:
     - get:
         url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
@@ -40,13 +41,19 @@ scenarios:
           json: "$.symbol"
           as: "symbol"
     - think: 2
-    - get:
-        url: "/api/graph/stockHistory?id={{ symbol }}&term={{ term }}"
-    - think: 2
-    - get:
-        url: "/api/graph/stockHistory?id={{ symbol }}&term={{ term }}"
-  - name: "Check stock 1D and 5Y"
-    weight: 1
+    - loop:
+      - get:
+          url: "/api/graph/stockHistory?id={{ symbol }}&term={{ $loopElement }}"
+      - think: 1
+      over:
+        - 1W
+        - 1M
+        - 3M
+        - 1Y
+        - 5Y
+        - 1D
+  - name: "Check stock 1D and 5Y views"
+    weight: 200
     flow:
     - get:
         url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
@@ -57,4 +64,3 @@ scenarios:
     - get:
         url: "/api/graph/stockHistory?id={{ symbol }}&term=5Y"
     
-
