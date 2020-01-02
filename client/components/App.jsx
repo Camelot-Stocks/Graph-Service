@@ -51,6 +51,7 @@ class App extends React.Component {
 	}
 
 	changeView(option) {
+		// TODO - call populate stocks with option, then chain following logic
 		this.setState({
 			view: option,
 			viewText: buildViewText(option),
@@ -62,8 +63,8 @@ class App extends React.Component {
 		);
 	}
 
-	populateStocks(callback) {
-		fetch(`/api/graph/stockHistory${window.location.search || '?id=4'}`, { method: 'GET' })
+	populateStocks(callback, term = '1D') {
+		fetch(`/api/graph/stockHistory${window.location.search || '?id=PN93O'}&term=${term}`, { method: 'GET' })
 			.then((response) => response.json())
 			.then((data) => { 
 				// debugger;
