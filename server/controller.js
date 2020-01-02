@@ -15,23 +15,26 @@ const getStockHistory = async (symbol, term) => {
     '1Y': " AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2018-12-31'",
     '5Y': " AND extract_dow(ts) = 1 AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2014-12-31'",
   };
+
+  const queryValues = [symbol];
+
   // TODO - vulnerable to injection attack through term?
   const queryPrices = `SELECT price FROM prices WHERE stock_symbol=$1${priceQueryData[term]};`;
   queries.push(pool.query({
     text: queryPrices,
-    values: [symbol],
+    values: queryValues,
   }));
 
   const queryTags = 'SELECT tag_name FROM tags t JOIN stock_tags s ON t.tag_id=s.tag_id WHERE stock_symbol=$1;';
   queries.push(pool.query({
     text: queryTags,
-    values: [symbol],
+    values: queryValues,
   }));
 
   const queryStocks = 'SELECT stock_name,owners,analyst_hold FROM stocks WHERE stock_symbol=$1;';
   queries.push(pool.query({
     text: queryStocks,
-    values: [symbol],
+    values: queryValues,
   }));
 
   const [priceHistoryRes, tagRes, stockRes] = await Promise.all(queries);
