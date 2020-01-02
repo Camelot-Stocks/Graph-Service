@@ -1,10 +1,11 @@
 const { db } = require('../database/index.js');
 
+let pool;
+(async () => { pool = await db; })();
 
 const getStockHistory = async (symbol, term) => {
   // TODO - can these three combined queries be moved to a pg function for one server query?
   // TODO - prepare queries?
-  const pool = await db;
   const queries = [];
 
   const priceQueryData = {
@@ -56,7 +57,6 @@ const getStockHistory = async (symbol, term) => {
 
 const addStockHistory = async (prices) => {
   // TODO - prepare query
-  const pool = await db;
   const queries = [];
 
   for (let i = 0; i < prices.length; i += 1) {

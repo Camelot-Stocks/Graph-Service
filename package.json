@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
-    "start:dev": "nodemon --inspect server/server.js",
+    "start:dev": "nodemon --inspect-brk server/server.js",
     "build": "webpack --mode=production",
     "build:dev": "webpack -w -d",
     "seed": "node database/seedScripts/seedpg.js",
