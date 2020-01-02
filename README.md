@@ -82,7 +82,7 @@ TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
   ]
 }
 ```
-timestamp will be rounded to nearest 5 minutes
+timestamp must be rounded to nearest 5 minutes
 
 #### Response:
 created priceIds
@@ -113,7 +113,7 @@ created priceIds
   ]
 }
 ```
-timestamp will be rounded to nearest 5 minutes
+timestamp must be rounded to nearest 5 minutes
 
 #### Response:
 updated priceIds
@@ -142,7 +142,7 @@ updated priceIds
   },
 }
 ```
-timestamp will be rounded to nearest 5 minutes
+timestamp must be rounded to nearest 5 minutes
 
 #### Response:
 deleted priceIds
