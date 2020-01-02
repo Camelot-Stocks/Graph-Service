@@ -8,10 +8,10 @@ config:
   phases:
     - duration: 60
       arrivalRate: 50
-      rampTo: 260
+      rampTo: 275
       name: "ramp to peak"
     - duration: 180
-      arrivalRate: 260
+      arrivalRate: 275
       name: "peak load"
   # environments:
   #   production:
