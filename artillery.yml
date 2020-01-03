@@ -1,5 +1,5 @@
 config:
-  target: 'http://localhost:3000'
+  target: 'http://localhost:3001'
   http:
     pool: 10 # All HTTP requests from all virtual users will be sent over the same connection set, representing being behind load balancer in production
   ensure:
