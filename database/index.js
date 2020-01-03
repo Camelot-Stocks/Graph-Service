@@ -1,7 +1,7 @@
-/* eslint-disable no-console */
 const { Pool, Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const fancy = require('fancy-log');
 const auth = require('./auth');
 
 const createDbConn = async (scopeAuth) => {
@@ -26,8 +26,8 @@ const createDbConn = async (scopeAuth) => {
     await client.end();
   } catch (error) {
     if (error.code !== '42P04') {
-      // print error if not for db already exists
-      console.log(error);
+      // print error if error not for db already exists
+      fancy(error);
     }
     await client.end();
   }
@@ -42,14 +42,14 @@ const createDbConn = async (scopeAuth) => {
     // idleTimeoutMillis: 30000,
     // connectionTimeoutMillis: 2000,
   });
-  pool.on('error', console.log);
+  pool.on('error', fancy);
 
   try {
     const res = await pool.query('SELECT NOW()');
-    console.log(`Postgres connected for '${env}' env to pool for database '${database}' at ${res.rows[0].now}`);
+    fancy(`Postgres connected for '${env}' env to pool for database '${database}' at ${res.rows[0].now}`);
   } catch (error) {
-    console.log(`error creating pool for database '${database}'`);
-    console.log(error);
+    fancy(`error creating pool for database '${database}'`);
+    fancy(error);
   }
 
   return pool;
@@ -75,7 +75,7 @@ const cleanDbTables = (conn) => {
 };
 
 module.exports = {
-  db: createDbConn(auth).catch(console.log),
+  db: createDbConn(auth).catch(fancy),
   createDbTables,
   cleanDbTables,
 };

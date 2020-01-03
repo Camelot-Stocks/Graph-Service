@@ -1,0 +1,75 @@
+config:
+  target: 'http://localhost:3001'
+  http:
+    pool: 10 # All HTTP requests from all virtual users will be sent over the same connection set, representing being behind load balancer in production
+  ensure:
+    p95: 2000
+    maxErrorRate: 1
+  payload:
+    path: "database/seedfiles/stocks.csv"
+    fields:
+      - "stock_symbol"
+  phases:
+    - duration: 60
+      arrivalRate: 50
+      rampTo: 275
+      name: "ramp to peak"
+    - duration: 180
+      arrivalRate: 275
+      name: "peak load"
+  environments:
+    proxy-dev:
+      target: 'http://localhost:3000'
+      phases:
+      - duration: 60
+        arrivalRate: 50
+        rampTo: 100
+        name: "ramp to peak"
+      - duration: 180
+        arrivalRate: 100
+        name: "peak load"
+scenarios:
+  - name: "Add stock price"
+    weight: 1
+    flow:
+    - post:
+        url: "/api/graph/stockHistory"
+        json:
+          prices: [{"timestamp": "1999-01-08 04:05:00 -8:00","symbol": "PN93O","price": 166.09},{"timestamp": "1999-01-08 04:10:00 -8:00","symbol": "PN93O","price": 167.19}]
+  - name: "Check stock 1D view"
+    weight: 100
+    flow:
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
+  - name: "Check stock all views"
+    weight: 100
+    flow:
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
+        capture:
+          json: "$.symbol"
+          as: "symbol"
+    - think: 2
+    - loop:
+      - get:
+          url: "/api/graph/stockHistory?id={{ symbol }}&term={{ $loopElement }}"
+      - think: 1
+      over:
+        - 1W
+        - 1M
+        - 3M
+        - 1Y
+        - 5Y
+        - 1D
+  - name: "Check stock 1D and 5Y views"
+    weight: 200
+    flow:
+    - get:
+        url: "/api/graph/stockHistory?id={{ stock_symbol }}&term=1D"
+        capture:
+          json: "$.symbol"
+          as: "symbol"
+    - think: 2
+    - get:
+        url: "/api/graph/stockHistory?id={{ symbol }}&term=5Y"
+    
