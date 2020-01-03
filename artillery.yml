@@ -5,6 +5,10 @@ config:
   ensure:
     p95: 2000
     maxErrorRate: 1
+  payload:
+    path: "database/seedfiles/stocks.csv"
+    fields:
+      - "stock_symbol"
   phases:
     - duration: 60
       arrivalRate: 50
@@ -13,12 +17,9 @@ config:
     - duration: 180
       arrivalRate: 275
       name: "peak load"
-  # environments:
-  #   production:
-  payload:
-    path: "database/seedfiles/stocks.csv"
-    fields:
-      - "stock_symbol"
+  environments:
+    proxy-dev:
+      target: 'http://localhost:3000'
 scenarios:
   - name: "Add stock price"
     weight: 1
