@@ -20,6 +20,14 @@ config:
   environments:
     proxy-dev:
       target: 'http://localhost:3000'
+      phases:
+      - duration: 60
+        arrivalRate: 50
+        rampTo: 100
+        name: "ramp to peak"
+      - duration: 180
+        arrivalRate: 100
+        name: "peak load"
 scenarios:
   - name: "Add stock price"
     weight: 1
