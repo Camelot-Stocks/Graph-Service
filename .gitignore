@@ -4,3 +4,4 @@ Public/main.js
 database/seedFiles
 newrelic.js
 newrelic_agent.log
+authec2.js

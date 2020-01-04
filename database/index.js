@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
 const auth = require('./auth');
+const authec2 = require('./authec2');
 
 const createDbConn = async (scopeAuth) => {
   const env = process.env.NODE_ENV || 'dev';
@@ -75,7 +76,7 @@ const cleanDbTables = (conn) => {
 };
 
 module.exports = {
-  db: createDbConn(auth).catch(fancy),
+  db: createDbConn(authec2).catch(fancy),
   createDbTables,
   cleanDbTables,
 };
