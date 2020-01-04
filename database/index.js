@@ -63,6 +63,13 @@ const createDbTables = (conn) => {
   return conn.query(createDBQuery);
 };
 
+const createDbTableIndexes = (conn) => {
+  const schemaFile = path.resolve(__dirname, 'schemaAdd.sql');
+  const createDBQuery = fs.readFileSync(schemaFile).toString();
+
+  return conn.query(createDBQuery);
+};
+
 const cleanDbTables = (conn) => {
   const query = `
     TRUNCATE TABLE user_stocks CASCADE;
@@ -78,5 +85,6 @@ const cleanDbTables = (conn) => {
 module.exports = {
   db: createDbConn(authec2).catch(fancy),
   createDbTables,
+  createDbTableIndexes,
   cleanDbTables,
 };
