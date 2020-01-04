@@ -5,7 +5,9 @@ const path = require('path');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-const { db, createDbTables, cleanDbTables } = require('../index');
+const {
+  db, createDbTables, createDbTableIndexes, cleanDbTables,
+} = require('../index');
 const authec2 = require('../authec2');
 const {
   chainAsyncFuncCalls,
@@ -88,9 +90,9 @@ const seed = async (dbConn, dbHost) => {
   ), 1);
   fancy('seeded prices table');
 
-  // update db with schemaAdd.sql
+  await createDbTableIndexes(conn);
 
   await conn.end();
 };
 
-seed(db, authec2.production).catch(console.log);
+seed(db, authec2.production).catch(fancy);
