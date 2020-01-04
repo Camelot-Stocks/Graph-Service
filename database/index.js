@@ -1,8 +1,8 @@
-const { Pool, Client } = require('pg');
+const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
-const auth = require('./auth');
+// const auth = require('./auth');
 const authec2 = require('./authec2');
 
 const createDbConn = async (scopeAuth) => {
