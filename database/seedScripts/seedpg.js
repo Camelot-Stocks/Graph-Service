@@ -76,7 +76,7 @@ const seedUserStocks = async (dbConn) => {
 
 const seedPrices = async (dbConn) => {
   const queryChains = [];
-  const chainCount = 5;
+  const chainCount = 1;
   const chainLinkCount = Math.ceil(stocksCount / chainCount);
   const chainLinks = [];
   for (let i = 0; i < chainLinkCount; i += 1) {
