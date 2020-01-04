@@ -11,6 +11,7 @@ const {
   // genStocks, genUsers, genUserStocks, genPriceHistory,
   chainAsyncFuncCalls,
   genCSV,
+  deleteCSV,
   genStockRow,
   genTags,
   genTagRows,
@@ -18,6 +19,8 @@ const {
   genUserRows,
   genUserStocksRows,
 } = require('./seeddatagen');
+const genPriceHistoryRowsAsync = require('../seedScripts/genPriceHistoryRowsAsync');
+
 
 // const stocksCount = 200;
 // let stocks;
@@ -144,46 +147,59 @@ const copyCSVintoDB = async (hostAuth, filename, table, tableColsStr, delimiter 
 const seed = async (dbConn, dbHost) => {
   const conn = await dbConn;
 
-  await createDbTables(conn);
-  fancy('db tables created if not existing');
+  // await createDbTables(conn);
+  // fancy('db tables created if not existing');
 
-  await cleanDbTables(conn);
-  fancy('db tables cleaned');
+  // await cleanDbTables(conn);
+  // fancy('db tables cleaned');
 
-  const stocksCount = 200;
-  const stocksFilename = 'stocks.csv';
-  const stockSymbols = await genCSV(stocksFilename, genStockRow, stocksCount);
-  await copyCSVintoDB(dbHost, stocksFilename, 'stocks', 'stock_symbol,stock_name,owners,analyst_hold');
-  fancy('seeded stocks table');
+  // const stocksCount = 200;
+  // const stocksFilename = 'stocks.csv';
+  // const stockSymbols = await genCSV(stocksFilename, genStockRow, stocksCount);
+  // await copyCSVintoDB(dbHost, stocksFilename, 'stocks', 'stock_symbol,stock_name,owners,analyst_hold');
+  // fancy('seeded stocks table');
 
-  const tags = genTags();
-  const tagsFilename = 'tags.csv';
-  await genCSV(tagsFilename, genTagRows, 1, [tags]);
-  await copyCSVintoDB(dbHost, tagsFilename, 'tags', 'tag_name');
-  fancy('seeded tags table');
+  // const tags = genTags();
+  // const tagsFilename = 'tags.csv';
+  // await genCSV(tagsFilename, genTagRows, 1, [tags]);
+  // await copyCSVintoDB(dbHost, tagsFilename, 'tags', 'tag_name');
+  // fancy('seeded tags table');
 
-  const tagsRes = await conn.query('SELECT tag_id FROM tags;');
-  const tagsIds = tagsRes.rows.map((row) => row.tag_id);
-  const stockTagsFilename = 'stock_tags.csv';
-  await genCSV(stockTagsFilename, genStockTagRows, 1, [tagsIds, stockSymbols]);
-  await copyCSVintoDB(dbHost, stockTagsFilename, 'stock_tags', 'tag_id,stock_symbol');
-  fancy('seeded stock_tags table');
+  // const tagsRes = await conn.query('SELECT tag_id FROM tags;');
+  // const tagsIds = tagsRes.rows.map((row) => row.tag_id);
+  // const stockTagsFilename = 'stock_tags.csv';
+  // await genCSV(stockTagsFilename, genStockTagRows, 1, [tagsIds, stockSymbols]);
+  // await copyCSVintoDB(dbHost, stockTagsFilename, 'stock_tags', 'tag_id,stock_symbol');
+  // fancy('seeded stock_tags table');
 
-  const usersFilename = 'users.csv';
-  await genCSV(usersFilename, genUserRows, 1);
-  await copyCSVintoDB(dbHost, usersFilename, 'users', 'firstname,lastname,balance', '|');
-  fancy('seeded users table');
+  // const usersFilename = 'users.csv';
+  // await genCSV(usersFilename, genUserRows, 1);
+  // await copyCSVintoDB(dbHost, usersFilename, 'users', 'firstname,lastname,balance', '|');
+  // fancy('seeded users table');
 
-  const usersRes = await conn.query('SELECT user_id FROM users;');
-  const userIds = usersRes.rows.map((row) => row.user_id);
-  const userStocksFilename = 'user_stocks.csv';
-  await genCSV(userStocksFilename, genUserStocksRows, 1, [userIds, stockSymbols]);
-  await copyCSVintoDB(dbHost, userStocksFilename, 'user_stocks', 'user_id,stock_symbol,quantity');
-  fancy('seeded user_stocks table');
+  // const usersRes = await conn.query('SELECT user_id FROM users;');
+  // const userIds = usersRes.rows.map((row) => row.user_id);
+  // const userStocksFilename = 'user_stocks.csv';
+  // await genCSV(userStocksFilename, genUserStocksRows, 1, [userIds, stockSymbols]);
+  // await copyCSVintoDB(dbHost, userStocksFilename, 'user_stocks', 'user_id,stock_symbol,quantity');
+  // fancy('seeded user_stocks table');
 
+  const stocksRes = await conn.query('SELECT stock_symbol FROM stocks;');
+  const stockSymbols = stocksRes.rows.map((row) => row.stock_symbol);
+  const stocksCount = stockSymbols.length;
+  const chainCount = 5;
+  await chainAsyncFuncCalls(deleteCSV, chainCount, (unused, fileNum) => (
+    [`prices${fileNum}.csv`]), chainCount);
+  await chainAsyncFuncCalls(genCSV, stocksCount, (i, fileNum, chainI) => (
+    [`prices${fileNum}.csv`, genPriceHistoryRowsAsync, 1, [stockSymbols[i]], true, chainI]
+  ), chainCount);
   // fancy('seeding prices table...');
-  // await seedPrices(conn);
+  // await chainAsyncFuncCalls(copyCSVintoDB, stocksCount, (i) => (
+  //   [`prices${i}.csv`, 'prices', 'stock_symbol,ts,price']
+  // ), 1);
   // fancy('seeded prices table');
+
+  // update db with schemaAdd.sql
 
   await conn.end();
 };

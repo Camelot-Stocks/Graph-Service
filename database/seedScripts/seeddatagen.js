@@ -5,15 +5,17 @@ const path = require('path');
 const fancy = require('fancy-log');
 // const uuid = require('cassandra-driver').types.Uuid;
 
-const genCSV = async (filename, genData, batchCount, genDataArgs = []) => {
+const genCSV = async (filename, genData, batchCount, genDataArgs = [], doAppend, chainI) => {
   const csvFile = path.resolve(__dirname, '..', 'seedFiles', filename);
   const encoding = 'utf-8';
-  const writer = fs.createWriteStream(csvFile);
+  const writer = fs.createWriteStream(csvFile, {
+    flags: doAppend ? 'a' : 'w',
+  });
 
   const write = async (batchCountTotal, batchCountLeft, cb, batchIds = []) => {
     let canWrite = true;
     let i = batchCountLeft;
-    fancy(`1/${batchCountTotal} batch data gen and write started for ${filename}`);
+    fancy(`1/${batchCountTotal} batch data gen / write of link ${chainI} started for ${filename}`);
 
     do {
       i -= 1;
@@ -24,7 +26,7 @@ const genCSV = async (filename, genData, batchCount, genDataArgs = []) => {
 
       if (i === 0) {
         writer.write(writeStr, encoding, () => {
-          fancy(`${batchCountTotal}/${batchCountTotal} batch data gen and write finished for ${filename}`);
+          fancy(`${batchCountTotal}/${batchCountTotal} batch data gen / write of link ${chainI} finished for ${filename}`);
           cb(batchIds);
         });
       } else {
@@ -38,6 +40,24 @@ const genCSV = async (filename, genData, batchCount, genDataArgs = []) => {
   };
 
   return new Promise((resolve) => write(batchCount, batchCount, resolve));
+};
+
+const deleteCSV = async (filename) => {
+  const csvFile = path.resolve(__dirname, '..', 'seedFiles', filename);
+  try {
+    await fs.promises.access(csvFile);
+    return new Promise((resolve, reject) => {
+      fs.unlink(csvFile, (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+  } catch (error) {
+    return Promise.resolve();
+  }
 };
 
 const chainAsyncFuncCalls = (asyncFunc, totalLinkCount, callsArgGenerator, chainCount = 5) => {
@@ -55,7 +75,7 @@ const chainAsyncFuncCalls = (asyncFunc, totalLinkCount, callsArgGenerator, chain
 
         return linkIdx >= totalLinkCount
           ? Promise.resolve()
-          : asyncFunc(...callsArgGenerator(linkIdx));
+          : asyncFunc(...callsArgGenerator(linkIdx, chainId, cLI));
       })
     ), Promise.resolve())
   );
@@ -83,16 +103,18 @@ const genPriceHistoryRows = (symbol) => {
   const priceCount = 5 * 8760 * 12;
   let rowsStr = '';
   for (let i = 0; i < priceCount; i += 1) {
-    // const ts = time.format('YYYY-MM-DD HH:mm:ssZZ').substring(0, 22);
-    const ts = time.format('YYYY-MM-DD HH:mm:ssZZ');
+    const ts = time.format('YYYY-MM-DD HH:mm:ssZZ').substring(0, 22);
+    // const ts = time.format('YYYY-MM-DD HH:mm:ssZZ');
     price = Math.max(Math.round(100 * (price + trend
       * faker.random.number({ min: 0, max: 1, precision: 0.01 }))) / 100, 0.05);
-    const minute = time.minute();
-    const filter10min = minute % 10 === 0;
-    const filter1hr = minute === 0;
-    const filter1day = filter1hr && time.hour() === 17;
-    const filter7day = filter1day && time.day() === 1;
-    rowsStr += `${symbol},${ts},${price},${filter10min},${filter1hr},${filter1day},${filter7day}\n`;
+    // const minute = time.minute();
+    // const filter10min = minute % 10 === 0;
+    // const filter1hr = minute === 0;
+    // const filter1day = filter1hr && time.hour() === 17;
+    // const filter7day = filter1day && time.day() === 1;
+    // rowsStr += `${symbol},${ts},${price},
+    //   ${filter10min},${filter1hr},${filter1day},${filter7day}\n`;
+    rowsStr += `${symbol},${ts},${price}\n`;
 
     time.add(5, 'minutes');
     if (faker.random.number(100) > 97) {
@@ -233,6 +255,7 @@ const genPriceHistory = () => {
 
 module.exports = {
   genCSV,
+  deleteCSV,
   chainAsyncFuncCalls,
   genStockRow,
   genPriceHistoryRows,
