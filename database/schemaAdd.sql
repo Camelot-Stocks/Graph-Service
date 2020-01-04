@@ -1,4 +1,4 @@
-ALTER TABLE prices ADD CONSTRAINT symbolfk FOREIGN KEY (stock_symbol) REFERENCES stocks;
+ALTER TABLE prices ADD CONSTRAINT prices_symbol_fk FOREIGN KEY (stock_symbol) REFERENCES stocks;
 
 CREATE OR REPLACE FUNCTION extract_min(ts timestamptz)
 RETURNS double precision AS
