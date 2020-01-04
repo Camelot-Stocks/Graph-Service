@@ -3,7 +3,7 @@ const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
-const uuid = require('cassandra-driver').types.Uuid;
+// const uuid = require('cassandra-driver').types.Uuid;
 
 const genCSV = async (filename, genData, batchCount, genDataArgs = []) => {
   const csvFile = path.resolve(__dirname, '..', 'seedFiles', filename);
@@ -124,23 +124,39 @@ const genTagRows = (tags) => {
   return [null, rowsStr];
 };
 
-const genUserRows = (symbols) => {
+// const genUserRows = (symbols) => {
+const genUserRows = () => {
   const userCount = 100000;
   let rowsStr = '';
   for (let i = 0; i < userCount; i += 1) {
-    const userId = uuid.random();
+    // const userId = uuid.random();
     const firstname = faker.name.firstName().replace('\'', '');
     const lastname = faker.name.lastName().replace('\'', '');
     const balance = faker.random.number({ min: 0, max: 5000000, precision: 0.01 });
-    const stocksCount = faker.random.number(6);
-    const stocks = {};
-    for (let j = 0; j < stocksCount; j += 1) {
-      const stock = symbols[faker.random.number(symbols.length - 1)];
-      stocks[stock] = faker.random.number(1000);
-    }
-    const stocksStr = JSON.stringify(stocks).replace(/"/g, '\'');
-    rowsStr += `${userId}|${firstname}|${lastname}|${balance}|${stocksStr}\n`;
+    // const stocksCount = faker.random.number(6);
+    // const stocks = {};
+    // for (let j = 0; j < stocksCount; j += 1) {
+    //   const stock = symbols[faker.random.number(symbols.length - 1)];
+    //   stocks[stock] = faker.random.number(1000);
+    // }
+    // const stocksStr = JSON.stringify(stocks).replace(/"/g, '\'');
+    // rowsStr += `${userId}|${firstname}|${lastname}|${balance}|${stocksStr}\n`;
+    rowsStr += `${firstname}|${lastname}|${balance}\n`;
   }
+  return [null, rowsStr];
+};
+
+const genUserStocksRows = (userIds, stockSymbols) => {
+  const userStocksCount = 300000;
+  let rowsStr = '';
+
+  for (let i = 0; i < userStocksCount; i += 1) {
+    const userId = userIds[faker.random.number(userIds.length - 1)];
+    const stockSymbol = stockSymbols[faker.random.number(stockSymbols.length - 1)];
+    const qty = faker.random.number(10000);
+    rowsStr += `${userId},${stockSymbol},${qty}\n`;
+  }
+
   return [null, rowsStr];
 };
 
@@ -223,6 +239,7 @@ module.exports = {
   genTagRows,
   genStockTagRows,
   genUserRows,
+  genUserStocksRows,
   genStocks,
   genTags,
   genUsers,

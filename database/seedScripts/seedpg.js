@@ -16,6 +16,7 @@ const {
   genTagRows,
   genStockTagRows,
   genUserRows,
+  genUserStocksRows,
 } = require('./seeddatagen');
 
 // const stocksCount = 200;
@@ -168,12 +169,17 @@ const seed = async (dbConn, dbHost) => {
   await copyCSVintoDB(dbHost, stockTagsFilename, 'stock_tags', 'tag_id,stock_symbol');
   fancy('seeded stock_tags table');
 
-  // const usersRes = await seedUsers(conn);
-  // userIds = usersRes.rows.map((row) => row.user_id);
-  // fancy('seeded users table');
+  const usersFilename = 'users.csv';
+  await genCSV(usersFilename, genUserRows, 1);
+  await copyCSVintoDB(dbHost, usersFilename, 'users', 'firstname,lastname,balance', '|');
+  fancy('seeded users table');
 
-  // await seedUserStocks(conn);
-  // fancy('seeded user_stocks table');
+  const usersRes = await conn.query('SELECT user_id FROM users;');
+  const userIds = usersRes.rows.map((row) => row.user_id);
+  const userStocksFilename = 'user_stocks.csv';
+  await genCSV(userStocksFilename, genUserStocksRows, 1, [userIds, stockSymbols]);
+  await copyCSVintoDB(dbHost, userStocksFilename, 'user_stocks', 'user_id,stock_symbol,quantity');
+  fancy('seeded user_stocks table');
 
   // fancy('seeding prices table...');
   // await seedPrices(conn);
