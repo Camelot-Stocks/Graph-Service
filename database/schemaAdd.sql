@@ -13,16 +13,16 @@ LANGUAGE sql IMMUTABLE;
 CREATE OR REPLACE FUNCTION extract_dow(ts timestamptz)
 RETURNS double precision AS
 $$select extract(dow from ts);$$
-LANGUAGE sql IMMUTABLE;
 -- this one is not actually immutable and would cause issues in other countries with
 -- alternate day of week numbering schema
+LANGUAGE sql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION extract_date(ts timestamptz)
 RETURNS date AS
 $$select date(ts);$$
-LANGUAGE sql IMMUTABLE;
 -- this one is not actually immutable and would cause issues in other countries with
 -- alternate date formatting schema
+LANGUAGE sql IMMUTABLE;
 
 CREATE INDEX prices_search_idx ON prices (stock_symbol, ts, extract_min(ts), extract_hour(ts), extract_dow(ts));
 
