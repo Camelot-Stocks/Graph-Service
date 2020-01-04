@@ -8,9 +8,9 @@ const authec2 = require('./authec2');
 const createDbConn = async (scopeAuth) => {
   const env = process.env.NODE_ENV || 'dev';
   const {
-    user, password, host, port,
+    user, password, host, port, database,
   } = scopeAuth[env];
-  const database = `stockhistory_${env}`;
+  // const database = `stockhistory_${env}`;
 
   // const client = new Client({
   //   host,

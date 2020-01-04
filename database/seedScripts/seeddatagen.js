@@ -72,7 +72,7 @@ const genStockRow = () => {
   const name = faker.company.companyName().replace(/'|,/g, '');
   const analystHold = faker.random.number({ min: 0, max: 100, precision: 1 });
   const owners = faker.random.number(20000);
-  return [symbol, `${symbol},${name},${analystHold},${owners}\n`];
+  return [symbol, `${symbol},${name},${owners},${analystHold}\n`];
 };
 
 const genPriceHistoryRows = (symbol) => {
@@ -109,6 +109,16 @@ const genStockTagRows = (symbols, tags) => {
     const tag = tags[faker.random.number(tags.length - 1)];
     const symbol = symbols[faker.random.number(symbols.length - 1)];
     rowsStr += `${symbol},${tag}\n`;
+  }
+
+  return [null, rowsStr];
+};
+
+const genTagRows = (tags) => {
+  let rowsStr = '';
+  for (let i = 0; i < tags.length; i += 1) {
+    const tag = tags[i];
+    rowsStr += `${tag}\n`;
   }
 
   return [null, rowsStr];
@@ -210,6 +220,7 @@ module.exports = {
   chainAsyncFuncCalls,
   genStockRow,
   genPriceHistoryRows,
+  genTagRows,
   genStockTagRows,
   genUserRows,
   genStocks,
