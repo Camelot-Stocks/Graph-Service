@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
 const auth = require('./auth');
+// eslint-disable-next-line import/no-unresolved
 const authec2 = require('./authec2');
 
 const createDbConn = async (scopeAuth) => {

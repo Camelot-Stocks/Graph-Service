@@ -4,10 +4,10 @@ const fancy = require('fancy-log');
 const path = require('path');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-
 const {
   db, createDbTables, createDbTableIndexes, cleanDbTables,
 } = require('../index');
+// eslint-disable-next-line import/no-unresolved
 const authec2 = require('../authec2');
 const {
   chainAsyncFuncCalls,
