@@ -2,15 +2,16 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
-// const auth = require('./auth');
+const auth = require('./auth');
 const authec2 = require('./authec2');
 
 const createDbConn = async (scopeAuth) => {
   const env = process.env.NODE_ENV || 'dev';
   const {
-    user, password, host, port, database,
+    user, password, host, port,
   } = scopeAuth[env];
   // const database = `stockhistory_${env}`;
+  const database = scopeAuth[env].database || `stockhistory_${env}`;
 
   // const client = new Client({
   //   host,
@@ -47,7 +48,7 @@ const createDbConn = async (scopeAuth) => {
 
   try {
     const res = await pool.query('SELECT NOW()');
-    fancy(`Postgres connected for '${env}' env to pool for database '${database}' at ${res.rows[0].now}`);
+    fancy(`Postgres connected for '${env}' env to pool for database '${database}' at '${host}' at ${res.rows[0].now}`);
   } catch (error) {
     fancy(`error creating pool for database '${database}'`);
     fancy(error);
@@ -83,7 +84,7 @@ const cleanDbTables = (conn) => {
 };
 
 module.exports = {
-  db: createDbConn(authec2).catch(fancy),
+  db: createDbConn(process.env.NODE_ENV === 'production' ? authec2 : auth).catch(fancy),
   createDbTables,
   createDbTableIndexes,
   cleanDbTables,

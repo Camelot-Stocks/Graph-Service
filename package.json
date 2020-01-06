@@ -12,6 +12,7 @@
     "seed:prod": "NODE_ENV=production node database/seedScripts/seedpg.js",
     "seed:test": "node --inspect-brk database/seedScripts/seedpg.js",
     "dbperf": "node database/dbperf.js",
+    "dbperf:prod": "NODE_ENV=production node database/dbperf.js",
     "dbperf:test": "node --inspect-brk database/dbperf.js",
     "test": "jest --coverage --colors",
     "test:watch": "jest --watch --coverage",
