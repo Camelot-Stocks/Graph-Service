@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 const fancy = require('fancy-log');
-// const faker = require('faker');
 const path = require('path');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
