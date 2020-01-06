@@ -3,33 +3,37 @@ const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
 const auth = require('./auth');
+// eslint-disable-next-line import/no-unresolved
+const authec2 = require('./authec2');
 
 const createDbConn = async (scopeAuth) => {
   const env = process.env.NODE_ENV || 'dev';
   const {
     user, password, host, port,
   } = scopeAuth[env];
+  const database = scopeAuth[env].database || `stockhistory_${env}`;
 
-  const client = new Client({
-    host,
-    port,
-    database: 'postgres',
-    user,
-    password,
-  });
+  if (env !== 'production') {
+    const client = new Client({
+      host,
+      port,
+      database: 'postgres',
+      user,
+      password,
+    });
 
-  const database = `stockhistory_${env}`;
-  try {
-    const query = `CREATE DATABASE ${database};`;
-    await client.connect();
-    await client.query(query);
-    await client.end();
-  } catch (error) {
-    if (error.code !== '42P04') {
-      // print error if error not for db already exists
-      fancy(error);
+    try {
+      const query = `CREATE DATABASE ${database};`;
+      await client.connect();
+      await client.query(query);
+      await client.end();
+    } catch (error) {
+      if (error.code !== '42P04') {
+        // print error if error not for db already exists
+        fancy(error);
+      }
+      await client.end();
     }
-    await client.end();
   }
 
   const pool = new Pool({
@@ -46,7 +50,7 @@ const createDbConn = async (scopeAuth) => {
 
   try {
     const res = await pool.query('SELECT NOW()');
-    fancy(`Postgres connected for '${env}' env to pool for database '${database}' at ${res.rows[0].now}`);
+    fancy(`Postgres connected for '${env}' env to pool for database '${database}' at '${host}' at ${res.rows[0].now}`);
   } catch (error) {
     fancy(`error creating pool for database '${database}'`);
     fancy(error);
@@ -57,6 +61,13 @@ const createDbConn = async (scopeAuth) => {
 
 const createDbTables = (conn) => {
   const schemaFile = path.resolve(__dirname, 'schema.sql');
+  const createDBQuery = fs.readFileSync(schemaFile).toString();
+
+  return conn.query(createDBQuery);
+};
+
+const createDbTableIndexes = (conn) => {
+  const schemaFile = path.resolve(__dirname, 'schemaAdd.sql');
   const createDBQuery = fs.readFileSync(schemaFile).toString();
 
   return conn.query(createDBQuery);
@@ -75,7 +86,8 @@ const cleanDbTables = (conn) => {
 };
 
 module.exports = {
-  db: createDbConn(auth).catch(fancy),
+  db: createDbConn(process.env.NODE_ENV === 'production' ? authec2 : auth).catch(fancy),
   createDbTables,
+  createDbTableIndexes,
   cleanDbTables,
 };
