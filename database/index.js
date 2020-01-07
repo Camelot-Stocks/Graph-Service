@@ -1,4 +1,5 @@
-const { Pool, Client } = require('pg');
+const { Pool } = require('pg');
+// const { Pool, Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');

@@ -3,3 +3,4 @@
 #inherited client code, not cleaning up
 /client
 newrelic.js
+newrelic.example.js
