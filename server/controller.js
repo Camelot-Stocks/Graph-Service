@@ -75,4 +75,5 @@ const addStockHistory = async (prices) => {
 module.exports = {
   getStockHistory,
   addStockHistory,
+  priceQueryData,
 };

@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 const fancy = require('fancy-log');
 const { db } = require('./index');
+const { priceQueryData } = require('../server/controller');
 
 const benchmarkDB = async (dbConn) => {
   const conn = await dbConn;
@@ -10,12 +11,12 @@ const benchmarkDB = async (dbConn) => {
   const stocks = stocksquery.rows.map((row) => row.stock_symbol);
 
   const queriesData = [
-    ['1D', " AND ts > '2019-12-30'"],
-    ['1W', " AND ts > '2019-12-24' AND extract_min(ts) IN (0, 10, 20, 30, 40, 50)"],
-    ['1M', " AND ts > '2019-11-30' AND extract_min(ts) = 0"],
-    ['3M', " AND ts > '2019-09-30' AND extract_min(ts) = 0"],
-    ['1Y', " AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2018-12-31'"],
-    ['5Y', " AND extract_dow(ts) = 1 AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2014-12-31'"],
+    ['1D', priceQueryData['1D']],
+    ['1W', priceQueryData['1W']],
+    ['1M', priceQueryData['1M']],
+    ['3M', priceQueryData['3M']],
+    ['1Y', priceQueryData['1Y']],
+    ['5Y', priceQueryData['5Y']],
   ];
 
   for (let i = 0; i < queriesData.length; i += 1) {
