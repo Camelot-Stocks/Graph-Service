@@ -1,4 +1,5 @@
-const { Pool, Client } = require('pg');
+const { Pool } = require('pg');
+// const { Pool, Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
 const fancy = require('fancy-log');
@@ -13,28 +14,28 @@ const createDbConn = async (scopeAuth) => {
   } = scopeAuth[env];
   const database = scopeAuth[env].database || `stockhistory_${env}`;
 
-  if (env !== 'production') {
-    const client = new Client({
-      host,
-      port,
-      database: 'postgres',
-      user,
-      password,
-    });
+  // if (env !== 'production') {
+  //   const client = new Client({
+  //     host,
+  //     port,
+  //     database: 'postgres',
+  //     user,
+  //     password,
+  //   });
 
-    try {
-      const query = `CREATE DATABASE ${database};`;
-      await client.connect();
-      await client.query(query);
-      await client.end();
-    } catch (error) {
-      if (error.code !== '42P04') {
-        // print error if error not for db already exists
-        fancy(error);
-      }
-      await client.end();
-    }
-  }
+  //   try {
+  //     const query = `CREATE DATABASE ${database};`;
+  //     await client.connect();
+  //     await client.query(query);
+  //     await client.end();
+  //   } catch (error) {
+  //     if (error.code !== '42P04') {
+  //       // print error if error not for db already exists
+  //       fancy(error);
+  //     }
+  //     await client.end();
+  //   }
+  // }
 
   const pool = new Pool({
     host,
