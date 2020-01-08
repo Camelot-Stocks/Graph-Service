@@ -8,11 +8,7 @@ const priceQueryData = {
   '1W': "SELECT price FROM prices WHERE stock_symbol=$1 AND ts > '2019-12-24' AND extract_min(ts) IN (0, 10, 20, 30, 40, 50)",
   '1M': "SELECT price FROM prices WHERE stock_symbol=$1 AND ts > '2019-11-30' AND extract_min(ts) = 0",
   '3M': "SELECT price FROM prices WHERE stock_symbol=$1 AND ts > '2019-09-30' AND extract_min(ts) = 0",
-  // '1Y': " AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2018-12-31'",
-  // '1Y': " AND ts > '2018-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17",
   '1Y': 'SELECT price FROM prices_1yr_mv WHERE stock_symbol=$1;',
-  // '5Y': " AND extract_dow(ts) = 1 AND extract_hour(ts) = 17 AND extract_min(ts) = 0 AND ts > '2014-12-31'",
-  // '5Y': " AND ts > '2014-12-31' AND extract_min(ts) = 0 AND extract_hour(ts) = 17 AND extract_dow(ts) = 1",
   '5Y': 'SELECT price FROM prices_5yr_mv WHERE stock_symbol=$1;',
 };
 
