@@ -28,6 +28,6 @@ LANGUAGE sql IMMUTABLE;
 CREATE INDEX prices_search_idx ON prices (stock_symbol, ts DESC, extract_min(ts), extract_hour(ts), extract_dow(ts));
 
 -- CREATE INDEX prices_search_1yr_idx ON prices (stock_symbol, extract_hour(ts), extract_min(ts));
--- CREATE INDEX prices_search_1yr_idx ON prices (stock_symbol, ts, extract_hour(ts), extract_min(ts));
+CREATE INDEX prices_search_1yr_idx ON prices (stock_symbol, extract_hour(ts), extract_min(ts), ts DESC);
 
--- CREATE INDEX prices_search_5yr_idx ON prices (stock_symbol, extract_dow(ts), extract_hour(ts), extract_min(ts));
+CREATE INDEX prices_search_5yr_idx ON prices (stock_symbol, extract_dow(ts), extract_hour(ts), extract_min(ts), ts DESC);
