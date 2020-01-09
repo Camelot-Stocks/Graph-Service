@@ -1,4 +1,5 @@
 const { db } = require('../database/index.js');
+const { getCacheVal, addCacheVal } = require('../cache/index');
 
 let pool;
 (async () => { pool = await db; })();
@@ -13,6 +14,13 @@ const priceQueryData = {
 };
 
 const getStockHistory = async (symbol, term) => {
+  // TODO - is concatenating these and inserting as redis key safe?
+  const cacheKey = symbol + term;
+  const cacheVal = await getCacheVal(cacheKey);
+  if (cacheVal) {
+    return cacheVal;
+  }
+
   // TODO - can these three combined queries be moved to a pg function for one server query?
   // TODO - prepare queries?
   const queries = [];
@@ -48,6 +56,8 @@ const getStockHistory = async (symbol, term) => {
     analystHold: analyst_hold,
     name: stock_name,
   };
+
+  addCacheVal(cacheKey, stockHistory);
 
   return stockHistory;
 };
