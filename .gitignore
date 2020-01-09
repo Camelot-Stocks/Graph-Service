@@ -2,7 +2,7 @@ node_modules
 coverage
 Public/main.js
 database/seedFiles
-newrelic.example.js
+newrelic.js
 newrelic_agent.log
 authec2.js
 .DS_Store
