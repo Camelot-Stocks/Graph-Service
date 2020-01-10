@@ -1,5 +1,5 @@
 # Description
-Backend of stock price history graph microservice scaled to over 2000 API requests per second using AWS hosting.
+Backend of stock price history graph microservice deployed on AWS EC2 T2 micros.
 
 
 Screenshot of frontend:
