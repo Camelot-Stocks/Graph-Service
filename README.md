@@ -1,6 +1,12 @@
 # Description
 Backend of stock price history graph microservice scaled to over 2000 API requests per second using AWS hosting.
 
+
+Screenshot of frontend:
+
+![Imgur Image](https://i.imgur.com/ZtBOqYf.png)
+
+
 # API
 
 ## Route
