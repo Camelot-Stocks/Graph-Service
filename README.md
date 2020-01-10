@@ -1,5 +1,5 @@
 # Description
-Backend of stock price history graph microservice deployed on AWS EC2 T2 micros.
+Rebuild of backend for stock price history graph microservice deployed on AWS EC2 T2 micros.
 
 
 Screenshot of frontend:
