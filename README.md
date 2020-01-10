@@ -31,7 +31,7 @@ TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
   price: 166.09,
 }
 ```
-*historicPrice property that matches query term will be returned.
+*historicPrice property matching query term will be returned.
 
 
 ### POST
@@ -57,7 +57,7 @@ TERM = ['1D', '1W', '1M', '3M', '1Y', '5Y']
 timestamp must be rounded to nearest 5 minutes
 
 #### Response:
-created priceIds
+created priceIdCount
 ```javascript
 {
   createdCount: 2,
@@ -88,7 +88,7 @@ created priceIds
 timestamp must be rounded to nearest 5 minutes
 
 #### Response:
-updated priceIds
+updated priceIdCount
 ```javascript
 {
   updatedCount: 2,
@@ -117,7 +117,7 @@ updated priceIds
 timestamp must be rounded to nearest 5 minutes
 
 #### Response:
-deleted priceIds
+deleted priceIdCount
 ```javascript
 {
   deletedCount: 2,
